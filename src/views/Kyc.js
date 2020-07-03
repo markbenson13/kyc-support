@@ -1,16 +1,15 @@
 import React from "react";
-import Sidebar from "../components/Sidebar";
 import FirebaseConfig from "../config/FirebaseConfig";
+import Sidebar from "../components/Sidebar";
+import Header from "../components/Header";
 
 const Kyc = () => {
   return (
     <>
       <Sidebar />
+      <Header />
       <div className="content-wrapper">
-        <h1>KYC</h1>
-        <button onClick={() => FirebaseConfig.auth().signOut()}>
-          Sign out
-        </button>
+        <h2>KYC</h2>
       </div>
     </>
   );

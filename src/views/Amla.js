@@ -7,7 +7,9 @@ const Amla = () => {
     <div>
       <Sidebar />
       <Header />
-      <div>Amla</div>
+      <div className="content-wrapper">
+        <h2>Amla</h2>
+      </div>
     </div>
   );
 };

@@ -9,8 +9,8 @@ import Kyc from "./Kyc";
 const Dashboard = () => {
   return (
     <>
-      <Sidebar />
-      <Header />
+      {/* <Sidebar />
+      <Header /> */}
       <div className="content-wrapper">
         {/* <button onClick={() => FirebaseConfig.auth().signOut()}>
           Sign out
