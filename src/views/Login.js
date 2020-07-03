@@ -78,7 +78,7 @@ const Login = ({ history }) => {
           email.value,
           password.value
         );
-        history.push("/dashboard");
+        history.push("/kyc");
       } catch (error) {
         alert(error);
       }
@@ -89,7 +89,7 @@ const Login = ({ history }) => {
   const { currentUser } = useContext(AuthContext);
 
   if (currentUser) {
-    return <Redirect to="/dashboard" />;
+    return <Redirect to="/kyc" />;
   }
 
   // return (

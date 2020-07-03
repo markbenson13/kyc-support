@@ -1,0 +1,58 @@
+//# Drawer
+
+.sidebar-wrapper {
+
+  >div {
+    background-color: $secondary;
+    width: 120px;
+  }
+
+  .nav-menu {
+    margin-top: 2rem;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-flow: column;
+    margin: 1rem 0;
+
+    .icon {
+      width: 25px;
+      height: 25px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+
+      &.kyc {
+        background-image: url("../images/icons/kyc.png");
+      }
+
+      &.amla {
+        background-image: url("../images/icons/amla.png");
+      }
+
+      &.accounts {
+        background-image: url("../images/icons/accounts.png");
+      }
+    }
+
+    span {
+      color: $white;
+      font-size: 14px;
+    }
+  }
+}
+
+.avatar-wrapper {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    border: 1px solid $primary;
+    border-radius: 50%;
+    padding: 2px;
+    background-color: $white;
+  }
+}

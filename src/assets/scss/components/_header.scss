@@ -1,0 +1,22 @@
+//# Header
+
+.header-wrapper {
+  margin-left: 120px;
+
+  .header-container {
+    max-width: calc(100% - 120px);
+    min-height: 80px;
+    width: 100%;
+    margin: 0 auto 0 0;
+    background-color: $white;
+
+    >div {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    h1 {
+      font-size: 30px;
+    }
+  }
+}
