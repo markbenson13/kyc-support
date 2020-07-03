@@ -1,0 +1,84 @@
+//# Table
+
+.table-wrapper {
+  padding: 1.5em;
+  margin-top: 1rem;
+
+  h3 {
+    font-size: 18px;
+  }
+
+  .table-header {
+    h3 {
+      margin-bottom: 1rem;
+      font-size: $base;
+    }
+
+    .filter-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .left-filter {
+        display: flex;
+        align-items: center;
+
+        .form-control {
+          margin-right: 2rem;
+
+          &.level-filter {
+            label {
+              margin-right: 0.5rem;
+            }
+
+            select {
+              border: none;
+            }
+          }
+
+          &.date-filter {
+            input[type="date"] {
+              margin: 0 0.5rem;
+              border: none;
+            }
+          }
+        }
+      }
+
+      .right-filter {
+        .search-icon {
+          width: 20px;
+          height: 20px;
+          background: url("../images/icons/search@2x.png") center no-repeat;
+          background-size: contain;
+          display: inline-block;
+          vertical-align: middle;
+          margin-right: 0.5rem;
+        }
+
+        input {
+          padding: 0.2em;
+          border: none;
+          width: 70px;
+        }
+
+        button {
+          margin-left: 1rem;
+        }
+      }
+    }
+  }
+
+  .table {
+    margin-top: 1rem;
+
+    thead {
+      border-top: 1px solid #eaeaea;
+      color: $secondary;
+    }
+
+    .table-pagination {
+      display: flex;
+    }
+  }
+}

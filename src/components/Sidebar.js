@@ -31,7 +31,7 @@ const Sidebar = (props) => {
   return (
     <>
       <Drawer variant="permanent" className="sidebar-wrapper">
-        <div class="avatar-wrapper">
+        <div className="avatar-wrapper">
           <img src={Avatar} alt="Avatar" />
         </div>
         <Divider />
