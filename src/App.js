@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component, useState } from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Amla from "./views/Amla";
+import Dashboard from "./views/Dashboard";
+import Login from "./views/Login";
+import PrivateRoute from "./config/PrivateRoute";
+import { AuthProvider } from "./auth/Auth";
+import "../src/assets/css/main.min.css";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={Login} />
+          <PrivateRoute exact path="/dashboard" component={Dashboard} />
+          <PrivateRoute exact path="/amla" component={Amla} />
+        </Switch>
+      </BrowserRouter>
+    </AuthProvider>
   );
-}
+};
 
 export default App;

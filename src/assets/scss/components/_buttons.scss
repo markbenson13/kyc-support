@@ -1,0 +1,29 @@
+//# Button
+
+.btn {
+  padding: 0.5em 1.5em;
+  color: $secondary;
+  text-transform: uppercase;
+  font-size: 14px;
+  border: none;
+  border-radius: 1.5rem;
+  box-sizing: border-box;
+
+  &.btn-primary {
+    background-color: $primary;
+  }
+}
+
+.btn-link {
+  text-transform: capitalize;
+  color: grey;
+
+  .logout-icon {
+    background: url("../images/icons/logout@2x.png") no-repeat;
+    background-size: contain;
+    width: 15px;
+    height: 15px;
+    display: block;
+    margin-right: 0.5rem;
+  }
+}

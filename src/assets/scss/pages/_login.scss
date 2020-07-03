@@ -1,0 +1,27 @@
+//# Login
+
+.login-wrapper {
+  background: url("../images/background-img@2x.png") center no-repeat;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+
+  .form-container {
+    padding: 2em;
+
+    h1 {
+      font-size: 1.2em;
+      margin-top: 0.5rem;
+    }
+  }
+
+  .form-wrapper {
+    .btn-primary {
+      background-color: $primary;
+      margin-top: 1rem;
+      border-radius: 30px;
+      color: $secondary;
+    }
+  }
+}
