@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80px" height="68px" viewBox="0 0 80 68" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>logo</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Login" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="0-Login" transform="translate(-680.000000, -196.000000)">
+            <g id="form" transform="translate(507.000000, 166.000000)">
+                <g id="logo" transform="translate(173.000000, 30.000000)">
+                    <path d="M55,26.4177428 L39.5000727,0 L24,26.4177428 L27.6470332,30 L39.5000727,9.85070328 L51.3528214,30 L55,26.4177428 Z M59.4935899,33 L55.8480479,36.5442028 L71.7974941,63.5697465 L44,63.5697465 L44,68 L80,68 L59.4935899,33 Z M24.1519521,36.5442028 L20.5064101,33 L0,68 L36,68 L36,63.5697465 L8.20250589,63.5697465 L24.1519521,36.5442028 L24.1519521,36.5442028 Z" id="Fill-1" fill="#0A0B09"></path>
+                    <polyline id="Fill-3" fill="#F1C526" points="39.6741756 42.805619 49 32.6501882 39.6741756 16.3127754 39.6741756 16 39.5839852 16.1550127 39.4955266 16 39.4955266 16.3072754 30 32.6501882 39.4955266 42.8089479 39.4955266 43 39.5839852 42.9037503 39.6741756 43 39.6741756 42.805619"></polyline>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
