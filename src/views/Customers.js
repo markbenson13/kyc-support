@@ -38,21 +38,17 @@ const data = [
   },
 ];
 
-const Amla = () => {
+const Customers = () => {
   return (
     <div>
       <Sidebar />
       <Header />
       <div className="content-wrapper">
-        <h2>Amla</h2>
-        <Table
-          title="List of Politically Exposed Persons"
-          header={secondTableColumn}
-          data={data}
-        />
+        <h2>Customers</h2>
+        <Table title="Customers" header={secondTableColumn} data={data} />
       </div>
     </div>
   );
 };
 
-export default Amla;
+export default Customers;

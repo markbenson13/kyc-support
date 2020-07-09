@@ -95,84 +95,13 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-function createData(
-  name,
-  email,
-  dateSubmitted,
-  level,
-  customerType,
-  pepScan,
-  lastOpened,
-  action
-) {
-  return {
-    name,
-    email,
-    dateSubmitted,
-    level,
-    customerType,
-    pepScan,
-    lastOpened,
-    action,
-  };
-}
-
-const rows = [
-  createData(
-    "Angeles Barcelina",
-    "angeles@gmai.com",
-    "06/25/2020",
-    "Level 3",
-    "Individual",
-    "Negative",
-    "Winnie 06/25/2020 4:30",
-    "View"
-  ),
-  createData(
-    "Angeles Barcelina",
-    "angeles@gmai.com",
-    "06/25/2020",
-    "Level 3",
-    "Individual",
-    "Negative",
-    "Winnie 06/25/2020 4:30",
-    "View"
-  ),
-  createData(
-    "Angeles Barcelina",
-    "angeles@gmai.com",
-    "06/25/2020",
-    "Level 3",
-    "Individual",
-    "Negative",
-    "Winnie 06/25/2020 4:30",
-    "View"
-  ),
-  createData(
-    "Angeles Barcelina",
-    "angeles@gmai.com",
-    "06/25/2020",
-    "Level 3",
-    "Individual",
-    "Negative",
-    "Winnie 06/25/2020 4:30",
-    "View"
-  ),
-].sort((a, b) => (a.name < b.name ? -1 : 1));
-
-// const useStyles2 = makeStyles({
-//   table: {
-//     minWidth: 1000,
-//   },
-// });
-
 export default function KycTable({ title, header, data }) {
   // const classes = useStyles2();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -197,46 +126,43 @@ export default function KycTable({ title, header, data }) {
         <TableHead>
           <TableRow>
             {header.map(({ id, title }) => (
-              <TableCell>{title}</TableCell>
+              <TableCell key={id}>{title}</TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {(rowsPerPage > 0
+          {/* {(rowsPerPage > 0
             ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
-          ).map((data) => (
-            <TableRow key={data.name}>
-              <TableCell component="th" scope="row" style={{ width: 500 }}>
+            : data
+          ).map(( data) => (
+            <TableRow key={data.id}>
+              <TableCell component="th" scope="row">
                 {data.name}
               </TableCell>
-              <TableCell style={{ width: 500 }} align="left">
-                {data.email}
+            </TableRow>
+          ))} */}
+
+          {(rowsPerPage > 0
+            ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : data
+          ).map((data) => (
+            <TableRow key={data.id}>
+              <TableCell component="th" scope="row">
+                {data.name}
               </TableCell>
-              <TableCell style={{ width: 500 }} align="left">
-                {data.dateSubmitted}
-              </TableCell>
-              <TableCell style={{ width: 500 }} align="left">
-                {data.level}
-              </TableCell>
-              <TableCell style={{ width: 500 }} align="left">
-                {data.customerType}
-              </TableCell>
-              <TableCell style={{ width: 500 }} align="left">
-                {data.pepScan}
-              </TableCell>
-              <TableCell style={{ width: 500 }} align="left">
-                {data.openedBy}
-              </TableCell>
-              <TableCell style={{ width: 500 }} align="center">
-                {data.action}
-              </TableCell>
+              <TableCell align="left">{data.email}</TableCell>
+              <TableCell align="left">{data.dateSubmitted}</TableCell>
+              <TableCell align="left">{data.level}</TableCell>
+              <TableCell align="left">{data.customerType}</TableCell>
+              <TableCell align="left">{data.pepScan}</TableCell>
+              <TableCell align="left">{data.openedBy}</TableCell>
+              <TableCell align="center">{data.action}</TableCell>
             </TableRow>
           ))}
 
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
+              <TableCell colSpan={12} />
             </TableRow>
           )}
         </TableBody>
@@ -245,7 +171,7 @@ export default function KycTable({ title, header, data }) {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
               colSpan={8}
-              count={rows.length}
+              count={data.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{

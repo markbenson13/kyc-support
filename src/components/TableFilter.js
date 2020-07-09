@@ -5,9 +5,9 @@ const TableFilter = () => {
     <div className="filter-wrapper">
       <div className="left-filter">
         <div className="form-control level-filter">
-          <label for="level">Level:</label>
+          <label htmlFor="level">Level:</label>
           <select name="level" id="level">
-            <option selected>All</option>
+            <option defaultValue>All</option>
             <option>Level 1</option>
             <option>Level 2</option>
             <option>Level 3</option>
@@ -15,7 +15,7 @@ const TableFilter = () => {
           </select>
         </div>
         <div className="form-control date-filter">
-          <label for="level">Set Date Range:</label>
+          <label htmlFor="level">Set Date Range:</label>
           <input
             type="date"
             name="from-date"

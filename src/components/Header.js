@@ -3,6 +3,7 @@ import FirebaseConfig from "../config/FirebaseConfig";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+import Link from "@material-ui/core/Link";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
@@ -123,14 +124,23 @@ const Header = () => {
     </Menu>
   );
 
+  if (window.location.pathname === "/amla") {
+    console.log("yes it is");
+  }
+
   return (
     <>
       <AppBar position="static" className="header-wrapper">
-        <div class="header-container">
+        <div className="header-container">
           <Toolbar>
             <Typography className={classes.title} variant="h1" noWrap>
               LoyalWallet
             </Typography>
+            <div className="nav-menu">
+              <Link href="/amla">Political Persons</Link>
+              <Link href="/accounts">Accounts</Link>
+              <Link href="/customers">Customers</Link>
+            </div>
 
             <div className={classes.sectionDesktop}>
               <IconButton
