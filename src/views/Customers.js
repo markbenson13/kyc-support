@@ -1,40 +1,56 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import Table from "../components/Table";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableFooter from "@material-ui/core/TableFooter";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
+import TableFilter from "../components/TableFilter";
+import Paper from "@material-ui/core/Paper";
+import Link from "@material-ui/core/Link";
 
-const secondTableColumn = [
-  { id: "id", title: "RM Number" },
+const customersColumn = [
   { id: "name", title: "Name" },
-  { id: "lastUpdateby", title: "Last Update By" },
-  { id: "lastOpenedby", title: "Last Opened By" },
+  { id: "email", title: "Email" },
+  { id: "dateSubmitted", title: "Date Submitted" },
+  { id: "level", title: "Level" },
+  { id: "status", title: "Status" },
+  { id: "feedback", title: "Feedback" },
   { id: "action", title: "Action" },
 ];
 
-const data = [
+const customerData = [
   {
-    id: 1,
     name: "Rodrigo Roa Duterte",
-    lastUpdateby: "Winnie 06/25/2020 10:20",
-    dateSubmitted: "Winnie 06/25/2020 10:20",
+    email: "roa@gmail.com",
+    dateSubmitted: "06/25/2020",
+    level: "Level 1",
+    status: "Approved",
+    feedback: "Your feedback here",
     action: "View",
-    _unique: "ID",
   },
   {
-    id: 1,
-    name: "Benigno Aquino Jr.",
-    lastUpdateby: "Winnie 06/25/2020 10:20",
-    dateSubmitted: "Winnie 06/25/2020 10:20",
+    name: "Harry Roque",
+    email: "harry@gmail.com",
+    dateSubmitted: "06/25/2020",
+    level: "Level 1",
+    status: "Approved",
+    feedback: "Your feedback here",
     action: "View",
-    _unique: "ID",
   },
   {
-    id: 3,
     name: "Gloria Macapagal Arroyo",
-    lastUpdateby: "Winnie 06/25/2020 10:20",
-    dateSubmitted: "Winnie 06/25/2020 10:20",
+    email: "garroyo@gmail.com",
+    dateSubmitted: "06/25/2020",
+    level: "Level 1",
+    status: "Approved",
+    feedback: "Your feedback here",
     action: "View",
-    _unique: "ID",
   },
 ];
 
@@ -45,7 +61,42 @@ const Customers = () => {
       <Header />
       <div className="content-wrapper">
         <h2>Customers</h2>
-        <Table title="Customers" header={secondTableColumn} data={data} />
+        <TableContainer
+          component={Paper}
+          id="table-wrapper"
+          className="table-wrapper"
+        >
+          <div className="table-header">
+            <Typography variant="h3">Customers</Typography>
+            <TableFilter />
+          </div>
+          <Table className="table" aria-label="custom pagination table">
+            <TableHead>
+              <TableRow>
+                {customersColumn.map(({ id, title }) => (
+                  <TableCell key={id}>{title}</TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {customerData.map((data) => (
+                <TableRow key={data.id}>
+                  <TableCell component="th" scope="row">
+                    {data.name}
+                  </TableCell>
+                  <TableCell align="left">{data.email}</TableCell>
+                  <TableCell align="left">{data.dateSubmitted}</TableCell>
+                  <TableCell align="left">{data.level}</TableCell>
+                  <TableCell align="left">{data.status}</TableCell>
+                  <TableCell align="left">{data.feedback}</TableCell>
+                  <TableCell align="center">
+                    <Link to="/">{data.action}</Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </div>
   );

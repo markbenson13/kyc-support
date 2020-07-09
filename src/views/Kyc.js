@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { db, auth } from "../config/FirebaseConfig";
+import FirebaseConfig, { db, auth } from "../config/FirebaseConfig";
 import firebase from "firebase";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
@@ -147,19 +147,24 @@ class Kyc extends React.Component {
   }
 
   componentDidMount() {
-    // console.log(db.ref("user_kyc"));
-    // db.ref("user_kyc")
-    //   .child("5e65fcd8cb4b50001805efae")
-    //   .on("value", (snapshot) => {
-    //     const users = snapshot.val();
-    //     console.log(users);
-    //   });
+    console.log();
+    const pepRef = FirebaseConfig.database().ref("user_namescan/pep");
+    pepRef.once("value", (snapshot) => {
+      console.log(snapshot.val());
+    });
+    // console.log(pepRef);
+    // db.ref("user_kyc/").on("value", (snapshot) => {
+    //   const users = snapshot.val();
+    //   console.log(users);
+    // });
 
     const user_kyc =
       "https://loyaltywallet-e9379.firebaseio.com/user_kyc.json/";
     const user_wallet =
       "https://loyaltywallet-e9379.firebaseio.com/user_wallet.json/";
+
     const getUserKyc = axios.get(user_kyc);
+
     // .then((res) => {
     //   const userIds = Object.keys(res.data);
     //   const users = [];
