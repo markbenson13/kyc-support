@@ -87,6 +87,7 @@ const Header = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const visible = React.useState(true);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -124,9 +125,17 @@ const Header = () => {
     </Menu>
   );
 
-  if (window.location.pathname === "/amla") {
-    console.log("yes it is");
-  }
+  const headerMenu = () => {
+    if (window.location.pathname === "/amla") {
+      return (
+        <div className="nav-menu">
+          <Link href="/amla">Political Persons</Link>
+          <Link href="/accounts">Accounts</Link>
+          <Link href="/customers">Customers</Link>
+        </div>
+      );
+    }
+  };
 
   return (
     <>
@@ -136,11 +145,8 @@ const Header = () => {
             <Typography className={classes.title} variant="h1" noWrap>
               LoyalWallet
             </Typography>
-            <div className="nav-menu">
-              <Link href="/amla">Political Persons</Link>
-              <Link href="/accounts">Accounts</Link>
-              <Link href="/customers">Customers</Link>
-            </div>
+
+            {headerMenu()}
 
             <div className={classes.sectionDesktop}>
               <IconButton

@@ -26,6 +26,7 @@ const customersColumn = [
 
 const customerData = [
   {
+    id: 1,
     name: "Rodrigo Roa Duterte",
     email: "roa@gmail.com",
     dateSubmitted: "06/25/2020",
@@ -35,6 +36,7 @@ const customerData = [
     action: "View",
   },
   {
+    id: 2,
     name: "Harry Roque",
     email: "harry@gmail.com",
     dateSubmitted: "06/25/2020",
@@ -44,6 +46,7 @@ const customerData = [
     action: "View",
   },
   {
+    id: 3,
     name: "Gloria Macapagal Arroyo",
     email: "garroyo@gmail.com",
     dateSubmitted: "06/25/2020",
@@ -80,7 +83,7 @@ const Customers = () => {
             </TableHead>
             <TableBody>
               {customerData.map((data) => (
-                <TableRow key={data.id}>
+                <TableRow key={data.id} className="table-row">
                   <TableCell component="th" scope="row">
                     {data.name}
                   </TableCell>

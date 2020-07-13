@@ -75,6 +75,10 @@
     thead {
       border-top: 1px solid #eaeaea;
       color: $secondary;
+
+      .table-row th:last-child {
+        text-align: center;
+      }
     }
 
     .table-pagination {

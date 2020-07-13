@@ -6,11 +6,12 @@ import Kyc from "./views/Kyc";
 import Accounts from "./views/Accounts";
 import Login from "./views/Login";
 import Customers from "./views/Customers";
+import KycDetails from "./views/KycDetails";
 import PrivateRoute from "./config/PrivateRoute";
 import { AuthProvider } from "./auth/Auth";
 import "../src/assets/css/main.min.css";
 
-console.log(window.location.pathname);
+// console.log(window.location.pathname);
 
 class App extends React.Component {
   constructor(props) {
@@ -23,14 +24,6 @@ class App extends React.Component {
   render() {
     const isAmla = this.state.isAmla;
 
-    if (isAmla) {
-      {
-        /* <PrivateRoute exact path="/amla" component={Amla} />
-      <PrivateRoute exact path="/accounts" component={Accounts} />
-      <PrivateRoute exact path="/customers" component={Customers} /> */
-      }
-    }
-
     return (
       <AuthProvider>
         <BrowserRouter>
@@ -41,6 +34,7 @@ class App extends React.Component {
             <PrivateRoute exact path="/amla" component={Amla} />
             <PrivateRoute exact path="/accounts" component={Accounts} />
             <PrivateRoute exact path="/customers" component={Customers} />
+            <PrivateRoute path="/user/:id" component={KycDetails} />
           </Switch>
         </BrowserRouter>
       </AuthProvider>

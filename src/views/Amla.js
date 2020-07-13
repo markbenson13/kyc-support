@@ -68,8 +68,8 @@ const Amla = () => {
             </Typography>
           </div>
           <Table className="table" aria-label="custom pagination table">
-            <TableHead>
-              <TableRow>
+            <TableHead className="table-head">
+              <TableRow className="table-row">
                 {amlaColumn.map(({ id, title }) => (
                   <TableCell key={id}>{title}</TableCell>
                 ))}

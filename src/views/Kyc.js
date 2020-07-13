@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import FirebaseConfig, { db, auth } from "../config/FirebaseConfig";
-import firebase from "firebase";
+import { db } from "../config/FirebaseConfig";
+// import firebase from "firebase";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 // import Table from "../components/Table";
@@ -16,7 +16,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import TableFilter from "../components/TableFilter";
 import { Typography } from "@material-ui/core";
-import { Link } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const pendingColumn = [
   { id: "name", title: "Name" },
@@ -111,28 +111,6 @@ const allData = [
   },
 ];
 
-function TablePaginationActions(props) {
-  // const classes = useStyles1();
-  // const theme = useTheme();
-  const { count, page, rowsPerPage, onChangePage } = props;
-
-  const handleFirstPageButtonClick = (event) => {
-    onChangePage(event, 0);
-  };
-
-  const handleBackButtonClick = (event) => {
-    onChangePage(event, page - 1);
-  };
-
-  const handleNextButtonClick = (event) => {
-    onChangePage(event, page + 1);
-  };
-
-  const handleLastPageButtonClick = (event) => {
-    onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
-}
-
 class Kyc extends React.Component {
   constructor(props) {
     super(props);
@@ -147,134 +125,75 @@ class Kyc extends React.Component {
   }
 
   componentDidMount() {
-    console.log();
-    const pepRef = FirebaseConfig.database().ref("user_namescan/pep");
-    pepRef.once("value", (snapshot) => {
-      console.log(snapshot.val());
-    });
-    // console.log(pepRef);
-    // db.ref("user_kyc/").on("value", (snapshot) => {
-    //   const users = snapshot.val();
-    //   console.log(users);
-    // });
-
-    const user_kyc =
-      "https://loyaltywallet-e9379.firebaseio.com/user_kyc.json/";
-    const user_wallet =
-      "https://loyaltywallet-e9379.firebaseio.com/user_wallet.json/";
-
-    const getUserKyc = axios.get(user_kyc);
-
-    // .then((res) => {
-    //   const userIds = Object.keys(res.data);
-    //   const users = [];
-    //   // console.log(userIds);
-
-    //   userIds.forEach((user) => {
-    //     let { data, name_scan, sanctions_list, status } = res.data[user];
-    //     users.push({
-    //       id: user,
-    //       user_data: JSON.parse(data["level_2"]),
-    //       name_scan: JSON.parse(name_scan),
-    //       sanctions_list: JSON.parse(sanctions_list),
-    //       status: JSON.parse(status),
-    //     });
-    //   });
-
-    //   this.setState({
-    //     users: users,
-    //   });
-    // console.log(this.state.users);
-    // });
-
-    const getUserWallet = axios.get(user_wallet);
-    // .then((res) => {
-    //   const userIds = Object.keys(res.data);
-    //   const user_wallet = [];
-    //   // console.log(userIds);
-
-    //   userIds.forEach((user) => {
-    //     let { data } = res.data[user];
-    //     user_wallet.push({
-    //       id: user,
-    //       user_data: JSON.parse(data),
-    //     });
-    //   });
-
-    //   this.setState({
-    //     users_wallet: user_wallet,
-    //   });
-    //   // console.log(this.state.users_wallet);
-    // });
-
+    const users = [];
     const usersObj = {};
     const users_wallet = [];
 
-    Promise.all([getUserKyc, getUserWallet]).then((values) => {
-      console.log("asd", values);
-      const userKycData = values.filter((x) => x.config.url === user_kyc);
-      const userWalletData = values.filter((x) => x.config.url === user_wallet);
-      console.log("userWalletData", userWalletData);
+    const userKyc = db.ref("user_kyc");
+    const userWallet = db.ref("user_wallet");
 
-      userKycData.forEach((kyc_data) => {
-        const userIds = Object.keys(kyc_data.data);
+    const userDataMap = {};
 
-        console.log(userIds);
+    Promise.all([userKyc.once("value"), userWallet.once("value")]).then(
+      (response) => {
+        response.forEach((data) => {
+          const key = data.key;
+          if (key === "user_kyc") {
+            processUserKyc(data.val());
+          } else if (key === "user_wallet") {
+            processUserWallet(data.val());
+          }
+        });
+        console.log(Object.values(userDataMap));
+        this.setState({ users: Object.values(userDataMap) });
+      }
+    );
 
-        userIds.forEach((user) => {
-          console.log("kycid", user);
+    function processUserKyc(data) {
+      for (const key in data) {
+        const kyc_object = data[key];
 
-          let { data, name_scan, sanctions_list, status } = kyc_data.data[user];
-          usersObj[user] = {
-            user_data: JSON.parse(data["level_2"]),
-            name_scan: JSON.parse(name_scan),
-            sanctions_list: JSON.parse(sanctions_list),
-            status: JSON.parse(status),
+        userDataMap[key] = {
+          ...userDataMap[key],
+          ...{
+            id: key,
+            data: JSON.parse(kyc_object.data.level_2),
+            level_3: JSON.parse(kyc_object.data.level_3),
+            level_4: JSON.parse(kyc_object.data.level_4),
+            name_scan: JSON.parse(kyc_object.name_scan),
+            sanctions_list: JSON.parse(kyc_object.sanctions_list),
+            status: JSON.parse(kyc_object.status),
+          },
+        };
+      }
+    }
+
+    function processUserWallet(obj) {
+      for (const key in obj) {
+        const wallet_object = JSON.parse(obj[key].data);
+        wallet_object.forEach((obj) => {
+          userDataMap[obj.userId] = {
+            ...userDataMap[obj.userId],
+            ...obj,
           };
         });
-      });
-
-      userWalletData.forEach((wallet_data) => {
-        const userIds = Object.keys(wallet_data.data);
-        console.log(userIds);
-
-        userIds.forEach((user) => {
-          let { data } = wallet_data.data[user];
-          data = JSON.parse(data);
-          console.log("userwalletid", user);
-          usersObj[user] = {
-            ...{
-              id: user,
-              wallet_data: data[0],
-            },
-            ...usersObj[user],
-          };
-          console.log("data", data);
-        });
-      });
-      const usersArray = Object.values(usersObj);
-      console.log("usersArray", usersArray);
-      this.setState({
-        users: usersArray,
-        users_wallet: users_wallet,
-      });
-    });
+      }
+    }
   }
 
   render() {
+    function formatDate(string) {
+      var options = { month: "numeric", day: "numeric", year: "numeric" };
+      return new Date(string).toLocaleDateString([], options);
+    }
+
     return (
       <>
         <Sidebar />
         <Header />
-
-        {/* {console.log(this.state.users)} */}
         <div className="content-wrapper">
           <h2>KYC</h2>
-          <ul>
-            {this.state.users.map((user) => {
-              return [user.id, user.user_data.birthplace];
-            })}
-          </ul>
+
           <TableContainer
             component={Paper}
             id="table-wrapper"
@@ -293,27 +212,89 @@ class Kyc extends React.Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {pendingData.map((data) => (
-                  <TableRow key={data.id}>
-                    <TableCell component="th" scope="row">
-                      {data.name}
-                    </TableCell>
-                    <TableCell align="left">{data.email}</TableCell>
-                    <TableCell align="left">{data.dateSubmitted}</TableCell>
-                    <TableCell align="left">{data.level}</TableCell>
-                    <TableCell align="left">{data.customerType}</TableCell>
-                    <TableCell align="left">{data.pepScan}</TableCell>
-                    <TableCell align="left">{data.openedBy}</TableCell>
-                    <TableCell align="center">
-                      <Link to="/">{data.action}</Link>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {this.state.users.length &&
+                  this.state.users.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell>
+                        {user.data.first_name +
+                          " " +
+                          user.data.middle_name +
+                          " " +
+                          user.data.last_name}
+                      </TableCell>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell>{formatDate(user.createdAt)}</TableCell>
+                      <TableCell>Level {user.status.current_level}</TableCell>
+                      <TableCell>{user.typeOfUser}</TableCell>
+                      <TableCell>{user.sanctions_list.name}</TableCell>
+                      <TableCell>{formatDate(user.updatedAt)}</TableCell>
+                      <TableCell align="center">
+                        <Link
+                          to={{
+                            pathname: `/user/${user.id}`,
+                            state: { user: user },
+                          }}
+                        >
+                          View
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>
 
           <TableContainer
+            component={Paper}
+            id="table-wrapper"
+            className="table-wrapper"
+          >
+            <div className="table-header">
+              <Typography variant="h3">All KYC</Typography>
+              <TableFilter />
+            </div>
+            <Table className="table" aria-label="custom pagination table">
+              <TableHead>
+                <TableRow>
+                  {pendingColumn.map(({ id, title }) => (
+                    <TableCell key={id}>{title}</TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {this.state.users.length &&
+                  this.state.users.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell>
+                        {user.data.first_name +
+                          " " +
+                          user.data.middle_name +
+                          " " +
+                          user.data.last_name}
+                      </TableCell>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell>{formatDate(user.createdAt)}</TableCell>
+                      <TableCell>Level {user.status.current_level}</TableCell>
+                      <TableCell>{user.typeOfUser}</TableCell>
+                      <TableCell>{user.sanctions_list.name}</TableCell>
+                      <TableCell>{user.updatedAt}</TableCell>
+                      <TableCell align="center">
+                        <Link
+                          to={{
+                            pathname: `/user/${user.id}`,
+                            state: { user: user },
+                          }}
+                        >
+                          View
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          {/* <TableContainer
             component={Paper}
             id="table-wrapper"
             className="table-wrapper"
@@ -348,7 +329,7 @@ class Kyc extends React.Component {
                 ))}
               </TableBody>
             </Table>
-          </TableContainer>
+          </TableContainer> */}
         </div>
       </>
     );

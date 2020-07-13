@@ -2,19 +2,19 @@ import firebase from "firebase";
 // import "firebase/auth";
 
 const config = {
-  apiKey: "AIzaSyCovIGSW0uk6LCdVBmt354J9Ry7zst0nUY",
-  authDomain: "loyaltywallet-e9379.firebaseapp.com",
-  databaseURL: "https://loyaltywallet-e9379.firebaseio.com",
-  projectId: "loyaltywallet-e9379",
-  storageBucket: "loyaltywallet-e9379.appspot.com",
-  messagingSenderId: "774095261078",
-  appId: "1:774095261078:web:ee7131df3bfd31efd461b7",
-  measurementId: "G-F37FSHEPQX",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_DATABASE_URL,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 const FirebaseConfig = firebase.initializeApp(config);
 
 // export const auth = FirebaseConfig.auth();
-export const db = FirebaseConfig.database();
+export const db = firebase.database();
 
 export default FirebaseConfig;
