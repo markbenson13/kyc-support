@@ -50,33 +50,43 @@ class KycDetails extends React.Component {
 
     this.state = {
       userDetails: [],
-      image: null,
-      setImage: null,
-      progress: 0,
-      setProgress: 0,
+      storageUrl: [],
+      mounted: true,
+      image: "",
       url: "",
-      setUrl: "",
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleUpload = this.handleUpload.bind(this);
   }
 
   componentDidMount = () => {
     const person = this.props.location.state.user;
     this.setState({ userDetails: person });
+    console.log("person", person);
 
-    // const ref = firebase.storage().ref(`${personId}`).child();
-    // console.log("ref", ref);
-    // ref
-    //   .getDownloadURL()
-    //   .then((url) => {
-    //     console.log(url);
-    //     this.setState({ storageUrl: url });
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
+    const personId = person.id;
+    // console.log("id", personId);
+
+    const storage = firebase.storage();
+    const files = [
+      // person.data.id_photo_front_url,
+      // person.data.id_photo_back_url,
+      // person.data.selfie_id_url,
+      // person.level_3.permanent_address.billing_statement_photo_url,
+      // person.level_4.document_photo_url,
+    ];
+
+    // console.log("files", files);
+
+    // files.map((filename) => {
+    //   storage
+    //     .ref(`/${filename}`)
+    //     .getDownloadURL()
+    //     .then((url) => {
+    //       console.log("download url", url);
+    //       this.setState({ storageUrl: url });
+    //     });
+    // });
   };
 
   handleChange = (e) => {
@@ -89,55 +99,15 @@ class KycDetails extends React.Component {
     }
   };
 
-  handleUpload = () => {
-    // const person = this.props.location.state.user;
-    // this.setState({ userDetails: person });
-    // const personId = person.id;
-    // const uploadImage = firebase
-    //   .storage()
-    //   .ref(`${personId}/${image.name}`)
-    //   .put(image);
-    // uploadImage.on(
-    //   "state_changed",
-    //   (snapshot) => {
-    //     const progress = Math.round(
-    //       (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-    //     );
-    //     this.setState({setProgress: progress});
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   },
-    //   () => {
-    //     firebase
-    //       .storage()
-    //       .ref(personId)
-    //       .child(image.name)
-    //       .getDownloadURL()
-    //       .then((url) => {
-    //         setUrl(url);
-    //       });
-    //   }
-    // );
-  };
-
   render() {
     // console.log("setImage", this.state.setImage);
     const detail = this.state.userDetails;
-    const image = this.state.image;
+    const imageUrl = this.state.storageUrl;
 
-    // if (!image) {
-    //   return false;
-    //   console.log("image", image);
-    // }
+    // console.log("storageUrl", this.state.storageUrl);
+    // console.log("details", detail);
 
-    // const storageURL = this.state.storageUrl;
-
-    // console.log(storageURL);
-
-    console.log(this.state.userDetails);
-
-    if (!detail.data) return false;
+    if (!detail.permanentAddress && !detail.presentAddress) return false;
 
     return (
       <>
@@ -170,51 +140,43 @@ class KycDetails extends React.Component {
                 <Typography variant="body1" className="detail-label">
                   First Name
                 </Typography>
-                <Typography variant="body2">
-                  {detail.data.first_name}
-                </Typography>
+                <Typography variant="body2">{detail.first_name}</Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Middle Name
                 </Typography>
-                <Typography variant="body2">
-                  {detail.data.middle_name}
-                </Typography>
+                <Typography variant="body2">{detail.middle_name}</Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Last Name
                 </Typography>
-                <Typography variant="body2">{detail.data.last_name}</Typography>
+                <Typography variant="body2">{detail.last_name}</Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Gender
                 </Typography>
-                <Typography variant="body2">{detail.data.gender}</Typography>
+                <Typography variant="body2">{detail.gender}</Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Birthday
                 </Typography>
-                <Typography variant="body2">{detail.data.birthdate}</Typography>
+                <Typography variant="body2">{detail.birthdate}</Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Birthplace
                 </Typography>
-                <Typography variant="body2">
-                  {detail.data.birthplace}
-                </Typography>
+                <Typography variant="body2">{detail.birthplace}</Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Nationality
                 </Typography>
-                <Typography variant="body2">
-                  {detail.data.nationality}
-                </Typography>
+                <Typography variant="body2">{detail.nationality}</Typography>
               </Grid>
             </Grid>
           </Paper>
@@ -232,25 +194,21 @@ class KycDetails extends React.Component {
                 <Typography variant="body1" className="detail-label">
                   Government Issued ID
                 </Typography>
-                <Typography variant="body2">
-                  {detail.data.id_photo_type}
-                </Typography>
+                <Typography variant="body2">{detail.idPhotoType}</Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   ID Expiration Date
                 </Typography>
                 <Typography variant="body2">
-                  {detail.data.id_photo_exp_date}
+                  {detail.idPhotoExpiration}
                 </Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   ID Number
                 </Typography>
-                <Typography variant="body2">
-                  {detail.data.id_photo_no}
-                </Typography>
+                <Typography variant="body2">{detail.idPhotoNo}</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2}>
@@ -258,15 +216,21 @@ class KycDetails extends React.Component {
                 <Typography variant="body1" className="detail-label">
                   ID Image
                 </Typography>
-                {/* <img
-                  src={storageURL + "/" + detail.data.id_photo_front_url}
-                  alt=""
-                /> */}
+                <img
+                  className="image-photo"
+                  src={detail.idPhotoFrontUrl}
+                  alt="Issued ID"
+                />
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Selfie with ID
                 </Typography>
+                <img
+                  className="image-photo"
+                  src={detail.selfieUrl}
+                  alt="Selfie with ID"
+                />
               </Grid>
             </Grid>
           </Paper>
@@ -285,17 +249,17 @@ class KycDetails extends React.Component {
                   Current Address
                 </Typography>
                 <Typography variant="body2">
-                  {detail.level_3.present_address.street_address +
+                  {detail.presentAddress.street_address +
                     " " +
-                    detail.level_3.present_address.address_info +
+                    detail.presentAddress.address_info +
                     ", " +
-                    detail.level_3.present_address.barangay +
+                    detail.presentAddress.barangay +
                     ", " +
-                    detail.level_3.present_address.city +
+                    detail.presentAddress.city +
                     ", " +
-                    detail.level_3.present_address.state +
+                    detail.presentAddress.state +
                     " " +
-                    detail.level_3.present_address.zip_code}
+                    detail.presentAddress.zip_code}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
@@ -303,17 +267,17 @@ class KycDetails extends React.Component {
                   Permanent Address
                 </Typography>
                 <Typography variant="body2">
-                  {detail.level_3.permanent_address.street_address +
+                  {detail.permanentAddress.street_address +
                     " " +
-                    detail.level_3.permanent_address.address_info +
+                    detail.permanentAddress.address_info +
                     ", " +
-                    detail.level_3.permanent_address.barangay +
+                    detail.permanentAddress.barangay +
                     ", " +
-                    detail.level_3.permanent_address.city +
+                    detail.permanentAddress.city +
                     ", " +
-                    detail.level_3.permanent_address.state +
+                    detail.permanentAddress.state +
                     " " +
-                    detail.level_3.permanent_address.zip_code}
+                    detail.permanentAddress.zip_code}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
@@ -321,9 +285,13 @@ class KycDetails extends React.Component {
                   Proof of Address
                 </Typography>
                 <Typography variant="body2">
-                  Type of Document:{" "}
-                  {detail.level_3.permanent_address.billing_statement}
+                  Type of Document: {detail.permanentAddress.billing_statement}
                 </Typography>
+                <img
+                  className="image-photo"
+                  src={detail.permanentAddress.billing_statement_photo_url}
+                  alt="Billing statement"
+                />
               </Grid>
             </Grid>
           </Paper>
@@ -349,22 +317,18 @@ class KycDetails extends React.Component {
                 <Typography variant="body1" className="detail-label">
                   Occupation
                 </Typography>
-                <Typography variant="body2">
-                  {detail.level_4.employed.occupation}
-                </Typography>
+                <Typography variant="body2">{detail.occupation}</Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="body1" className="detail-label">
                   Position
                 </Typography>
-                <Typography variant="body2">
-                  {detail.level_4.employed.position}
-                </Typography>
+                <Typography variant="body2">{detail.position}</Typography>
                 <Typography variant="body1" className="detail-label">
                   Proof of Income
                 </Typography>
                 <Typography variant="body2">
-                  Type of Document: {detail.level_4.document_type}
+                  Type of Document: {detail.documentType}
                 </Typography>
               </Grid>
             </Grid>
@@ -373,24 +337,20 @@ class KycDetails extends React.Component {
                 <Typography variant="body1" className="detail-label">
                   Company Name/Business Name
                 </Typography>
-                <Typography variant="body2">
-                  {detail.level_4.employed.company}
-                </Typography>
+                <Typography variant="body2">{detail.company}</Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Industry
                 </Typography>
-                <Typography variant="body2">
-                  {detail.level_4.employed.industry}
-                </Typography>
+                <Typography variant="body2">{detail.industry}</Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Findings from PEP Scan
                 </Typography>
                 {/* <CircularProgress variant="static" value={progress} /> */}
-                <input
+                {/* <input
                   id="upload-photo"
                   name="upload-photo"
                   type="file"
@@ -402,7 +362,7 @@ class KycDetails extends React.Component {
                   onClick={this.handleUpload}
                 >
                   Upload file
-                </Button>
+                </Button> */}
                 {/* <img src={url} alt="firebase image" /> */}
               </Grid>
             </Grid>
