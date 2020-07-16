@@ -6,6 +6,7 @@
   .header-container {
     max-width: calc(100% - 120px);
     min-height: 80px;
+    height: 100%;
     width: 100%;
     margin: 0 auto 0 0;
     background-color: $white;
@@ -13,14 +14,46 @@
     >div {
       display: flex;
       justify-content: space-between;
+      height: 100%;
+      min-height: 80px;
     }
 
     h1 {
-      font-size: 30px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .nav-menu {
+      display: flex;
     }
 
     .nav-menu>a {
-      padding: 0 30px;
+      margin: 0 4rem;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      text-decoration: none;
+      color: gray;
+
+      &:hover,
+      &.active {
+        color: $secondary;
+
+        &:after {
+          opacity: 1;
+        }
+      }
+
+      &:after {
+        content: "";
+        border-bottom: 5px solid $primary;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        opacity: 0;
+      }
     }
   }
 }

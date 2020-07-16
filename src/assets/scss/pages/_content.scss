@@ -40,4 +40,13 @@
       border-bottom: 1px solid #e8e8e8;
     }
   }
+
+  .button-actions {
+    margin-top: 3rem;
+
+    >div {
+      display: flex;
+      justify-content: center;
+    }
+  }
 }

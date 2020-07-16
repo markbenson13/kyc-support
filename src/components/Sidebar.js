@@ -1,5 +1,5 @@
-import React from "react";
-import { withRouter } from "react-router-dom";
+import React, { useState, useEffect, Component } from "react";
+import { withRouter, NavLink } from "react-router-dom";
 import {
   Drawer,
   Divider,
@@ -7,27 +7,12 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Typography,
+  Link,
 } from "@material-ui/core/";
 import Avatar from "../assets/images/icons/User@2x.png";
 
-const Sidebar = (props) => {
-  const { history } = props;
-
-  const itemsList = [
-    {
-      text: "KYC",
-      onClick: () => history.push("/kyc"),
-    },
-    {
-      text: "Amla",
-      onClick: () => history.push("/amla"),
-    },
-    {
-      text: "Accounts",
-      onClick: () => history.push("/accounts"),
-    },
-  ];
-
+const Sidebar = () => {
   return (
     <>
       <Drawer variant="permanent" className="sidebar-wrapper">
@@ -35,24 +20,24 @@ const Sidebar = (props) => {
           <img src={Avatar} alt="Avatar" />
         </div>
         <Divider />
-        <List className="nav-menu">
-          {itemsList.map((item, index) => {
-            const { text, onClick } = item;
-            return (
-              <ListItem
-                button
-                key={text}
-                className="nav-item"
-                onClick={onClick}
-              >
-                <ListItemIcon
-                  className={`icon ${text.toLowerCase()}`}
-                ></ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            );
-          })}
-        </List>
+        <div className="nav-menu">
+          <NavLink to="/kyc" className="nav-item" activeClassName="is-active">
+            <div className="icon kyc"></div>
+            KYC
+          </NavLink>
+          <NavLink to="/amla" className="nav-item" activeClassName="is-active">
+            <div className="icon amla"></div>
+            Amla
+          </NavLink>
+          <NavLink
+            to="/accounts"
+            className="nav-item"
+            activeClassName="is-active"
+          >
+            <div className="icon accounts"></div>
+            Accounts
+          </NavLink>
+        </div>
       </Drawer>
     </>
   );

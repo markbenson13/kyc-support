@@ -3,7 +3,7 @@ import FirebaseConfig from "../config/FirebaseConfig";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Link from "@material-ui/core/Link";
+import { NavLink } from "react-router-dom";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
@@ -126,12 +126,23 @@ const Header = () => {
   );
 
   const headerMenu = () => {
-    if (window.location.pathname === "/amla") {
+    const pathUrl = window.location.pathname;
+    if (
+      pathUrl === "/amla" ||
+      pathUrl === "/customers" ||
+      pathUrl === "/accounts"
+    ) {
       return (
         <div className="nav-menu">
-          <Link href="/amla">Political Persons</Link>
-          <Link href="/accounts">Accounts</Link>
-          <Link href="/customers">Customers</Link>
+          <NavLink to="/amla" exact activeClassName="active">
+            Political Persons
+          </NavLink>
+          <NavLink to="/accounts" exact activeClassName="active">
+            Accounts
+          </NavLink>
+          <NavLink to="/customers" exact activeClassName="active">
+            Customers
+          </NavLink>
         </div>
       );
     }

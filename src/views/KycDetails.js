@@ -12,6 +12,9 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import TableFilter from "../components/TableFilter";
 import { Typography } from "@material-ui/core";
+import ApproveModal from "../components/Modals/ApproveModal";
+import DeclineModal from "../components/Modals/DeclineModal";
+import EscalateModal from "../components/Modals/EscalateModal";
 import {
   Link,
   Grid,
@@ -55,58 +58,16 @@ class KycDetails extends React.Component {
       image: "",
       url: "",
     };
-
-    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount = () => {
     const person = this.props.location.state.user;
     this.setState({ userDetails: person });
     console.log("person", person);
-
-    const personId = person.id;
-    // console.log("id", personId);
-
-    const storage = firebase.storage();
-    const files = [
-      // person.data.id_photo_front_url,
-      // person.data.id_photo_back_url,
-      // person.data.selfie_id_url,
-      // person.level_3.permanent_address.billing_statement_photo_url,
-      // person.level_4.document_photo_url,
-    ];
-
-    // console.log("files", files);
-
-    // files.map((filename) => {
-    //   storage
-    //     .ref(`/${filename}`)
-    //     .getDownloadURL()
-    //     .then((url) => {
-    //       console.log("download url", url);
-    //       this.setState({ storageUrl: url });
-    //     });
-    // });
-  };
-
-  handleChange = (e) => {
-    console.log(e.target.files[0]);
-    const file = e.target.files[0];
-
-    if (file) {
-      this.setState({ setImage: file });
-      console.log(this.setState({ setImage: file }));
-    }
   };
 
   render() {
-    // console.log("setImage", this.state.setImage);
     const detail = this.state.userDetails;
-    const imageUrl = this.state.storageUrl;
-
-    // console.log("storageUrl", this.state.storageUrl);
-    // console.log("details", detail);
-
     if (!detail.permanentAddress && !detail.presentAddress) return false;
 
     return (
@@ -401,6 +362,25 @@ class KycDetails extends React.Component {
               </TableBody>
             </Table>
           </TableContainer>
+
+          <Grid
+            container
+            className="button-actions"
+            direction="row"
+            justify="center"
+            aligItems="center"
+            spacing={3}
+          >
+            <Grid item xs={1}>
+              <ApproveModal />
+            </Grid>
+            <Grid item xs={1}>
+              <DeclineModal />
+            </Grid>
+            <Grid item xs={1}>
+              <EscalateModal />
+            </Grid>
+          </Grid>
         </div>
       </>
     );

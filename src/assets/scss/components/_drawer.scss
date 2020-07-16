@@ -9,12 +9,18 @@
 
   .nav-menu {
     margin-top: 2rem;
+    text-align: center;
   }
 
   .nav-item {
     display: flex;
     flex-flow: column;
-    margin: 1rem 0;
+    align-items: center;
+    margin: 1rem 0 2rem;
+    cursor: pointer;
+    color: $white;
+    font-size: 14px;
+    text-decoration: none;
 
     .icon {
       width: 25px;
@@ -22,6 +28,7 @@
       background-repeat: no-repeat;
       background-position: center;
       background-size: contain;
+      margin-bottom: 0.5rem;
 
       &.kyc {
         background-image: url("../images/icons/kyc.png");
@@ -36,9 +43,18 @@
       }
     }
 
-    span {
-      color: $white;
-      font-size: 14px;
+    &.is-active {
+      .kyc {
+        background-image: url("../images/icons/kyc-active.png");
+      }
+
+      .amla {
+        background-image: url("../images/icons/amla-active.png");
+      }
+
+      .accounts {
+        background-image: url("../images/icons/accounts-active.png");
+      }
     }
   }
 }
