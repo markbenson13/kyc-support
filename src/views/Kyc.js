@@ -1,10 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 import { db } from "../config/FirebaseConfig";
-// import firebase from "firebase";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-// import Table from "../components/Table";
-import axios from "axios";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
@@ -139,6 +136,7 @@ class Kyc extends React.Component {
         const userIds = Object.keys(userKyc);
 
         const userMap = userIds.reduce((map, userId) => {
+          // console.log("userkys", userKyc[userId]);
           if (userKyc[userId].hasOwnProperty("data")) {
             map[userId] = {
               kycData: userKyc[userId],
@@ -152,57 +150,98 @@ class Kyc extends React.Component {
           return map;
         }, {});
 
-        Object.keys(userMap).map((users) => {
-          console.log("users", users);
-        });
+        // Object.keys(userMap).map((users) => {
+        //   console.log("users", users);
+        // });
 
-        console.log("usermap", userMap);
+        // console.log("usermap", userMap);
 
         const userList = Object.keys(userMap).map((userId) => {
-          const { kycData, walletData } = userMap[userId];
-          const data = JSON.parse(kycData.data.level_2);
-          const level3 = JSON.parse(kycData.data.level_3);
-          const level4 = JSON.parse(kycData.data.level_4);
-          const namescan = JSON.parse(kycData.name_scan);
-          const status = JSON.parse(kycData.status);
-          const wallet = JSON.parse(walletData.data);
+          const {
+            kycData: { data: newData, name_scan, status: newStatus, history },
+            walletData,
+          } = userMap[userId];
 
-          console.log("kycData", Object.values(kycData));
-          console.log("kycWallet", JSON.parse(walletData.data));
+          const data = newData.level_2 ? JSON.parse(newData.level_2) : {};
+          const level3 = newData.level_3 ? JSON.parse(newData.level_3) : {};
+          const level4 = newData.level_4 ? JSON.parse(newData.level_4) : {};
+          const newscan = name_scan ? JSON.parse(name_scan) : {};
+          const status = newStatus ? JSON.parse(newStatus) : {};
+          // const histories = history ? JSON.parse(history) : {};
+          const wallet = walletData.data ? JSON.parse(walletData.data) : {};
+
+          // const {
+          //   kycData: { data, name_scan, status },
+          //   walletData: wallet,
+          // } = userMap[userId];
+          // const level2 = data.level_2 ? JSON.parse(kycData.data.level_2) : {};
+          // const level3 = data.level_3 ? JSON.parse(kycData.data.level_3) : {};
+          // const level4 = data.level_4 ? JSON.parse(kycData.data.level_4) : {};
+          // const namescan = JSON.parse(kycData.name_scan);
+          // const status = JSON.parse(kycData.status);
+          // const wallet = JSON.parse(walletData.data);
+
+          // console.log("kycData", Object.values(kycData));
+          // console.log("kycWallet", JSON.parse(walletData.data));
+          // console.log("level 4", level4.employed);
+          // console.log("status", newStatus);
+
+          const newEmployed = level4.employed
+            ? (level4.employed === typeof Object && level4.employed) || {}
+            : {};
+          const newSelfEmployed = level4.self_employed
+            ? (level4.self_employed === typeof Object &&
+                level4.self_employed) ||
+              {}
+            : {};
+
+          console.log("history", history);
+          // console.log("pepMatch", newscan.numberOfPepMatches);
+
+          // const pepMatch = newscan.numberOfPepMatches;
+          // if (pepMatch == 0) {
+          //   const pepScan = "Negative";
+          // }
 
           return {
             id: userId,
-            first_name: data.first_name,
-            middle_name: data.middle_name,
-            last_name: data.last_name,
-            gender: data.gender,
-            idPhotoExpiration: data.id_photo_exp_date,
-            selfieUrl: data.selfie_id_url,
-            idPhotoType: data.id_photo_type,
-            birthdate: data.birthdate,
-            birthplace: data.birthplace,
-            idPhotoBackUrl: data.id_photo_back_url,
-            idPhotoFrontUrl: data.id_photo_front_url,
-            nationality: data.nationality,
-            idPhotoNo: data.id_photo_no,
-            email: wallet[0].email,
-            dateSubmitted: wallet[0].createdAt,
-            dateUpdated: wallet[0].updatedAt,
-            customerType: wallet[0].typeOfUser,
-            mobileNo: wallet[0].mobileNo,
-            level: status.current_level,
-            pepMatch: namescan.numberOfPepMatches,
-            presentAddress: level3.present_address,
-            permanentAddress: level3.permanent_address,
-            documentPhotoUrl: level4.document_photo_url,
-            documentType: level4.document_type,
-            occupation: level4.employed.occupation,
-            position: level4.employed.position,
-            industry: level4.employed.industry,
-            company: level4.employed.company,
+            first_name: data.first_name || "",
+            middle_name: data.middle_name || "",
+            last_name: data.last_name || "",
+            gender: data.gender || "",
+            idPhotoExpiration: data.id_photo_exp_date || "",
+            selfieUrl: data.selfie_id_url || "",
+            idPhotoType: data.id_photo_type || "",
+            birthdate: data.birthdate || "",
+            birthplace: data.birthplace || "",
+            idPhotoBackUrl: data.id_photo_back_url || "",
+            idPhotoFrontUrl: data.id_photo_front_url || "",
+            nationality: data.nationality || "",
+            idPhotoNo: data.id_photo_no || "",
+            email: wallet[0].email || "",
+            dateSubmitted: wallet[0].createdAt || "",
+            dateUpdated: wallet[0].updatedAt || "",
+            customerType: wallet[0].typeOfUser || "",
+            mobileNo: wallet[0].mobileNo || "",
+            level: status.current_level || "",
+            status: status.level_2[1].status || "",
+            pepMatch: newscan.numberOfPepMatches,
+            presentAddress: level3.present_address || {},
+            permanentAddress: level3.permanent_address || {},
+            documentPhotoUrl: level4.document_photo_url || "",
+            documentType: level4.document_type || "",
+            occupationDetails:
+              (!!Object.keys(newEmployed).length && newEmployed) ||
+              (!!Object.keys(newSelfEmployed).length && newSelfEmployed) ||
+              {},
+            employmentCategory:
+              (!!Object.keys(newEmployed).length && "Employed") ||
+              (!!Object.keys(newSelfEmployed).length && "Self Employed") ||
+              "",
           };
         });
 
+        console.log("userlist", userList);
         this.setState({ users: userList });
       }
     );
@@ -219,7 +258,6 @@ class Kyc extends React.Component {
       //   console.log("yes");
       // }
     }
-    pepMatchChecker();
 
     return (
       <>
@@ -326,43 +364,6 @@ class Kyc extends React.Component {
               </TableBody>
             </Table>
           </TableContainer>
-
-          {/* <TableContainer
-            component={Paper}
-            id="table-wrapper"
-            className="table-wrapper"
-          >
-            <div className="table-header">
-              <Typography variant="h3">All KYC</Typography>
-              <TableFilter />
-            </div>
-            <Table className="table" aria-label="custom pagination table">
-              <TableHead>
-                <TableRow>
-                  {allColumn.map(({ id, title }) => (
-                    <TableCell key={id}>{title}</TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {allData.map((data) => (
-                  <TableRow key={data.id}>
-                    <TableCell component="th" scope="row">
-                      {data.name}
-                    </TableCell>
-                    <TableCell align="left">{data.email}</TableCell>
-                    <TableCell align="left">{data.lastEditBy}</TableCell>
-                    <TableCell align="left">{data.level}</TableCell>
-                    <TableCell align="left">{data.status}</TableCell>
-                    <TableCell align="left">{data.feedback}</TableCell>
-                    <TableCell align="center">
-                      <Link to="/">{data.action}</Link>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer> */}
         </div>
       </>
     );

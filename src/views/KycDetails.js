@@ -15,6 +15,7 @@ import { Typography } from "@material-ui/core";
 import ApproveModal from "../components/Modals/ApproveModal";
 import DeclineModal from "../components/Modals/DeclineModal";
 import EscalateModal from "../components/Modals/EscalateModal";
+import SuccessModal from "../components/Modals/SuccessModal";
 import {
   Link,
   Grid,
@@ -60,7 +61,7 @@ class KycDetails extends React.Component {
     };
   }
 
-  componentDidMount = () => {
+  componentWillMount = () => {
     const person = this.props.location.state.user;
     this.setState({ userDetails: person });
     console.log("person", person);
@@ -68,7 +69,9 @@ class KycDetails extends React.Component {
 
   render() {
     const detail = this.state.userDetails;
-    if (!detail.permanentAddress && !detail.presentAddress) return false;
+    console.log("detail", detail);
+    console.log("address", detail.presentAddress);
+    // if (!detail.permanentAddress && !detail.presentAddress) return false;
 
     return (
       <>
@@ -210,17 +213,19 @@ class KycDetails extends React.Component {
                   Current Address
                 </Typography>
                 <Typography variant="body2">
-                  {detail.presentAddress.street_address +
-                    " " +
-                    detail.presentAddress.address_info +
-                    ", " +
-                    detail.presentAddress.barangay +
-                    ", " +
-                    detail.presentAddress.city +
-                    ", " +
-                    detail.presentAddress.state +
-                    " " +
-                    detail.presentAddress.zip_code}
+                  {(detail.presentAddress.street_address &&
+                    detail.presentAddress.street_address +
+                      " " +
+                      detail.presentAddress.address_info +
+                      ", " +
+                      detail.presentAddress.barangay +
+                      ", " +
+                      detail.presentAddress.city +
+                      ", " +
+                      detail.presentAddress.state +
+                      " " +
+                      detail.presentAddress.zip_code) ||
+                    ""}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
@@ -228,17 +233,19 @@ class KycDetails extends React.Component {
                   Permanent Address
                 </Typography>
                 <Typography variant="body2">
-                  {detail.permanentAddress.street_address +
-                    " " +
-                    detail.permanentAddress.address_info +
-                    ", " +
-                    detail.permanentAddress.barangay +
-                    ", " +
-                    detail.permanentAddress.city +
-                    ", " +
-                    detail.permanentAddress.state +
-                    " " +
-                    detail.permanentAddress.zip_code}
+                  {(detail.permanentAddress.street_address &&
+                    detail.permanentAddress.street_address +
+                      " " +
+                      detail.permanentAddress.address_info +
+                      ", " +
+                      detail.permanentAddress.barangay +
+                      ", " +
+                      detail.permanentAddress.city +
+                      ", " +
+                      detail.permanentAddress.state +
+                      " " +
+                      detail.permanentAddress.zip_code) ||
+                    ""}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
@@ -271,20 +278,28 @@ class KycDetails extends React.Component {
                   Employment Category
                 </Typography>
                 <Typography variant="body2">
-                  {/* {detail.level_4.employed} */}
+                  {detail.employmentCategory}
+                  {/* occupation: (level4.employed && level4.employed.occupation) || {},
+                  position: (level4.employed && level4.employed.position) || {},
+                  industry: (level4.employed && level4.employed.industry) || {},
+                  company: (level4.employed && level4.employed.company) || {}, */}
                 </Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Occupation
                 </Typography>
-                <Typography variant="body2">{detail.occupation}</Typography>
+                <Typography variant="body2">
+                  {detail.occupationDetails.occupation}
+                </Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="body1" className="detail-label">
                   Position
                 </Typography>
-                <Typography variant="body2">{detail.position}</Typography>
+                <Typography variant="body2">
+                  {detail.occupationDetails.position}
+                </Typography>
                 <Typography variant="body1" className="detail-label">
                   Proof of Income
                 </Typography>
@@ -298,33 +313,22 @@ class KycDetails extends React.Component {
                 <Typography variant="body1" className="detail-label">
                   Company Name/Business Name
                 </Typography>
-                <Typography variant="body2">{detail.company}</Typography>
+                <Typography variant="body2">
+                  {detail.occupationDetails.company}
+                </Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Industry
                 </Typography>
-                <Typography variant="body2">{detail.industry}</Typography>
+                <Typography variant="body2">
+                  {detail.occupationDetails.industry}
+                </Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Findings from PEP Scan
                 </Typography>
-                {/* <CircularProgress variant="static" value={progress} /> */}
-                {/* <input
-                  id="upload-photo"
-                  name="upload-photo"
-                  type="file"
-                  onChange={() => this.handleChange}
-                />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={this.handleUpload}
-                >
-                  Upload file
-                </Button> */}
-                {/* <img src={url} alt="firebase image" /> */}
               </Grid>
             </Grid>
           </Paper>
@@ -368,17 +372,17 @@ class KycDetails extends React.Component {
             className="button-actions"
             direction="row"
             justify="center"
-            aligItems="center"
+            alignItems="center"
             spacing={3}
           >
             <Grid item xs={1}>
-              <ApproveModal />
+              <ApproveModal userInfo={detail.id} />
             </Grid>
             <Grid item xs={1}>
-              <DeclineModal />
+              <DeclineModal userInfo={detail.id} />
             </Grid>
             <Grid item xs={1}>
-              <EscalateModal />
+              <EscalateModal userInfo={detail.id} />
             </Grid>
           </Grid>
         </div>
