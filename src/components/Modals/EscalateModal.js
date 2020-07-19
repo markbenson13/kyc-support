@@ -88,6 +88,7 @@ class EscalateModal extends React.Component {
     return (
       <div className="modal-wrapper">
         <Button
+          className="btn btn-primary"
           variant="contained"
           color="primary"
           onClick={this.handleClickOpen}
@@ -133,7 +134,12 @@ class EscalateModal extends React.Component {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.escalateKyc} color="primary" autoFocus>
+            <Button
+              className="btn btn-primary"
+              onClick={this.escalateKyc}
+              color="primary"
+              autoFocus
+            >
               Submit
             </Button>
           </DialogActions>

@@ -28,7 +28,12 @@ const SuccessModal = (props) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.close} color="primary" autoFocus>
+          <Button
+            className="btn btn-primary"
+            onClick={props.close}
+            color="primary"
+            autoFocus
+          >
             OK
           </Button>
         </DialogActions>

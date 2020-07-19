@@ -368,10 +368,12 @@ class KycDetails extends React.Component {
           <TableContainer
             component={Paper}
             id="table-wrapper"
-            className="table-wrapper history-table"
+            className="details-container table-wrapper history-table"
           >
             <div className="table-header">
-              <Typography variant="h3">KYC History</Typography>
+              <Typography variant="h2" className="detail-heading">
+                KYC History
+              </Typography>
             </div>
             <Table className="table" aria-label="custom pagination table">
               <TableHead>

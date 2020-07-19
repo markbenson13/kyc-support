@@ -96,6 +96,7 @@ class DeclineModal extends React.Component {
     return (
       <div className="modal-wrapper">
         <Button
+          className="btn btn-primary"
           variant="contained"
           color="primary"
           onClick={this.handleClickOpen}
@@ -127,7 +128,12 @@ class DeclineModal extends React.Component {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.confirmation} color="primary" autoFocus>
+            <Button
+              className="btn btn-primary"
+              onClick={this.confirmation}
+              color="primary"
+              autoFocus
+            >
               Submit
             </Button>
           </DialogActions>
@@ -140,10 +146,20 @@ class DeclineModal extends React.Component {
           open={this.state.confirmationModal}
           close={this.handleClose}
         >
-          <Button color="primary" onClick={this.handleClose}>
+          <Button
+            color="secondary"
+            variant="outlined"
+            onClick={this.handleClose}
+          >
             Cancel
           </Button>
-          <Button onClick={this.denyKyc} color="primary" autoFocus>
+          <Button
+            className="btn btn-primary"
+            onClick={this.denyKyc}
+            color="primary"
+            variant="contained"
+            autoFocus
+          >
             Yes, Deny KYC
           </Button>
         </ConfirmationModal>

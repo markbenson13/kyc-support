@@ -67,6 +67,7 @@ class ApproveModal extends React.Component {
       <div className="modal-wrapper">
         {/* Approve Modal */}
         <Button
+          className="btn btn-primary"
           variant="contained"
           color="primary"
           onClick={this.handleClickOpen}
@@ -82,13 +83,14 @@ class ApproveModal extends React.Component {
           close={this.handleClose}
         >
           <Button
-            color="primary"
-            variant="contained"
+            color="secondary"
+            variant="outlined"
             onClick={this.handleClose}
           >
             Cancel
           </Button>
           <Button
+            className="btn btn-primary"
             onClick={this.approveKyc}
             variant="contained"
             color="primary"
