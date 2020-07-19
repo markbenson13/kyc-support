@@ -21,6 +21,7 @@ class EscalateModal extends React.Component {
       email: "",
       confirmationModal: false,
       successModal: false,
+      userId: [],
     };
     this.handleFeedbackChange = this.handleFeedbackChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -29,9 +30,9 @@ class EscalateModal extends React.Component {
 
   componentDidMount() {
     const admin = firebase.auth().currentUser;
-    const person = this.props.userInfo;
+    const userId = this.props.userId;
 
-    this.setState({ userDetails: person });
+    this.setState({ userId: userId });
 
     admin.providerData.forEach((adminData) => {
       this.setState({ adminInfo: adminData });
@@ -58,7 +59,7 @@ class EscalateModal extends React.Component {
   }
 
   escalateKyc = () => {
-    const userId = this.state.userDetails;
+    const userId = this.state.userId;
 
     var historyRef = firebase
       .database()

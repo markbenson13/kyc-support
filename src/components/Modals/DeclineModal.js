@@ -21,6 +21,7 @@ class DeclineModal extends React.Component {
       feedback: "",
       confirmationModal: false,
       successModal: false,
+      userId: [],
     };
     this.handleChange = this.handleChange.bind(this);
     this.denyKyc = this.denyKyc.bind(this);
@@ -28,9 +29,9 @@ class DeclineModal extends React.Component {
 
   componentDidMount() {
     const admin = firebase.auth().currentUser;
-    const person = this.props.userInfo;
+    const userId = this.props.userId;
 
-    this.setState({ userDetails: person });
+    this.setState({ userId: userId });
 
     // Get admin user info
     admin.providerData.forEach((adminData) => {
@@ -64,7 +65,8 @@ class DeclineModal extends React.Component {
 
   // Deny KYC
   denyKyc = () => {
-    const userId = this.state.userDetails;
+    const userId = this.state.userId;
+    console.log("userid", userId);
 
     var historyRef = firebase
       .database()
@@ -90,6 +92,7 @@ class DeclineModal extends React.Component {
   };
 
   render() {
+    console.log(this.state.userId);
     return (
       <div className="modal-wrapper">
         <Button

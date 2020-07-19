@@ -1,15 +1,6 @@
-import React, { useState, useEffect, Component } from "react";
+import React from "react";
 import { withRouter, NavLink } from "react-router-dom";
-import {
-  Drawer,
-  Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-  Link,
-} from "@material-ui/core/";
+import { Drawer, Divider } from "@material-ui/core/";
 import Avatar from "../assets/images/icons/User@2x.png";
 
 const Sidebar = () => {

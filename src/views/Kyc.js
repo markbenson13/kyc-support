@@ -167,25 +167,8 @@ class Kyc extends React.Component {
           const level4 = newData.level_4 ? JSON.parse(newData.level_4) : {};
           const newscan = name_scan ? JSON.parse(name_scan) : {};
           const status = newStatus ? JSON.parse(newStatus) : {};
-          // const histories = history ? JSON.parse(history) : {};
           const wallet = walletData.data ? JSON.parse(walletData.data) : {};
-
-          // const {
-          //   kycData: { data, name_scan, status },
-          //   walletData: wallet,
-          // } = userMap[userId];
-          // const level2 = data.level_2 ? JSON.parse(kycData.data.level_2) : {};
-          // const level3 = data.level_3 ? JSON.parse(kycData.data.level_3) : {};
-          // const level4 = data.level_4 ? JSON.parse(kycData.data.level_4) : {};
-          // const namescan = JSON.parse(kycData.name_scan);
-          // const status = JSON.parse(kycData.status);
-          // const wallet = JSON.parse(walletData.data);
-
-          // console.log("kycData", Object.values(kycData));
-          // console.log("kycWallet", JSON.parse(walletData.data));
-          // console.log("level 4", level4.employed);
-          // console.log("status", newStatus);
-
+          const history_list = history;
           const newEmployed = level4.employed
             ? (level4.employed === typeof Object && level4.employed) || {}
             : {};
@@ -194,14 +177,6 @@ class Kyc extends React.Component {
                 level4.self_employed) ||
               {}
             : {};
-
-          console.log("history", history);
-          // console.log("pepMatch", newscan.numberOfPepMatches);
-
-          // const pepMatch = newscan.numberOfPepMatches;
-          // if (pepMatch == 0) {
-          //   const pepScan = "Negative";
-          // }
 
           return {
             id: userId,
@@ -238,6 +213,7 @@ class Kyc extends React.Component {
               (!!Object.keys(newEmployed).length && "Employed") ||
               (!!Object.keys(newSelfEmployed).length && "Self Employed") ||
               "",
+            history: history_list || {},
           };
         });
 
@@ -253,11 +229,10 @@ class Kyc extends React.Component {
       return new Date(string).toLocaleDateString([], options);
     }
 
-    function pepMatchChecker() {
-      // if (this.state.user.pepMatch === 0) {
-      //   console.log("yes");
-      // }
-    }
+    // const person = this.state.users;
+    // JSON.parse(person).map((user) => {
+    //   console.log("user", user);
+    // });
 
     return (
       <>
@@ -348,7 +323,7 @@ class Kyc extends React.Component {
                       <TableCell>{formatDate(user.dateSubmitted)}</TableCell>
                       <TableCell>Level {user.level}</TableCell>
                       <TableCell>{user.status}</TableCell>
-                      <TableCell>{user.feedback}</TableCell>
+                      <TableCell>{user.history.remarks}</TableCell>
                       <TableCell align="center">
                         <Link
                           to={{

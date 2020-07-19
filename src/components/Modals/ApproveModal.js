@@ -13,7 +13,7 @@ class ApproveModal extends React.Component {
       successModal: false,
       close: false,
       adminInfo: [],
-      userDetails: [],
+      userId: [],
     };
 
     this.approveKyc = this.approveKyc.bind(this);
@@ -21,9 +21,8 @@ class ApproveModal extends React.Component {
 
   componentDidMount() {
     const admin = firebase.auth().currentUser;
-    const person = this.props.userInfo;
-
-    this.setState({ userDetails: person });
+    const userId = this.props.userId;
+    this.setState({ userId: userId });
 
     admin.providerData.forEach((adminData) => {
       this.setState({ adminInfo: adminData });
@@ -42,7 +41,8 @@ class ApproveModal extends React.Component {
 
   // Approve KYC
   approveKyc = () => {
-    const userId = this.state.userDetails;
+    const userId = this.state.userId;
+    console.log("userId", userId);
 
     var historyRef = firebase
       .database()
@@ -94,7 +94,7 @@ class ApproveModal extends React.Component {
             color="primary"
             autoFocus
           >
-            Yes, Deny KYC
+            Yes
           </Button>
         </ConfirmationModal>
 

@@ -54,24 +54,47 @@ class KycDetails extends React.Component {
 
     this.state = {
       userDetails: [],
-      storageUrl: [],
-      mounted: true,
-      image: "",
-      url: "",
+      history: [],
     };
   }
 
   componentWillMount = () => {
     const person = this.props.location.state.user;
+    const history = person.history;
     this.setState({ userDetails: person });
+
     console.log("person", person);
+    // if (!detail.permanentAddress && !detail.presentAddress) return false;
+
+    const historyList = Object.keys(history, person).map((historyId) => {
+      const historyData = history[historyId];
+      const personInfo = person;
+
+      console.log("history-data", historyData);
+      console.log("person-data", personInfo);
+
+      return {
+        last_edit_date: historyData.last_edit_date || "",
+        remarks: historyData.remarks || "",
+        review_date: historyData.review_date || "",
+        reviewer: historyData.reviewer || "",
+        status: historyData.status || "",
+        level: personInfo.level || "",
+        dateSubmitted: personInfo.dateSubmitted || "",
+      };
+    });
+
+    this.setState({ history: historyList });
   };
 
   render() {
-    const detail = this.state.userDetails;
-    console.log("detail", detail);
-    console.log("address", detail.presentAddress);
-    // if (!detail.permanentAddress && !detail.presentAddress) return false;
+    const { userDetails, history } = this.state;
+    // console.log("userDetails", userDetails);
+    console.log("hist state", history);
+    function formatDate(string) {
+      var options = { month: "numeric", day: "numeric", year: "numeric" };
+      return new Date(string).toLocaleDateString([], options);
+    }
 
     return (
       <>
@@ -85,13 +108,13 @@ class KycDetails extends React.Component {
                 <Typography variant="body1" className="detail-label">
                   Mobile Number
                 </Typography>
-                <Typography variant="body2">{detail.mobileNo}</Typography>
+                <Typography variant="body2">{userDetails.mobileNo}</Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Email
                 </Typography>
-                <Typography variant="body2">{detail.email}</Typography>
+                <Typography variant="body2">{userDetails.email}</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2}>
@@ -104,43 +127,53 @@ class KycDetails extends React.Component {
                 <Typography variant="body1" className="detail-label">
                   First Name
                 </Typography>
-                <Typography variant="body2">{detail.first_name}</Typography>
+                <Typography variant="body2">
+                  {userDetails.first_name}
+                </Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Middle Name
                 </Typography>
-                <Typography variant="body2">{detail.middle_name}</Typography>
+                <Typography variant="body2">
+                  {userDetails.middle_name}
+                </Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Last Name
                 </Typography>
-                <Typography variant="body2">{detail.last_name}</Typography>
+                <Typography variant="body2">{userDetails.last_name}</Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Gender
                 </Typography>
-                <Typography variant="body2">{detail.gender}</Typography>
+                <Typography variant="body2">{userDetails.gender}</Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Birthday
                 </Typography>
-                <Typography variant="body2">{detail.birthdate}</Typography>
+                <Typography variant="body2">
+                  {formatDate(userDetails.birthdate)}
+                </Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Birthplace
                 </Typography>
-                <Typography variant="body2">{detail.birthplace}</Typography>
+                <Typography variant="body2">
+                  {userDetails.birthplace}
+                </Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Nationality
                 </Typography>
-                <Typography variant="body2">{detail.nationality}</Typography>
+                <Typography variant="body2">
+                  {userDetails.nationality}
+                </Typography>
               </Grid>
             </Grid>
           </Paper>
@@ -158,21 +191,23 @@ class KycDetails extends React.Component {
                 <Typography variant="body1" className="detail-label">
                   Government Issued ID
                 </Typography>
-                <Typography variant="body2">{detail.idPhotoType}</Typography>
+                <Typography variant="body2">
+                  {userDetails.idPhotoType}
+                </Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   ID Expiration Date
                 </Typography>
                 <Typography variant="body2">
-                  {detail.idPhotoExpiration}
+                  {formatDate(userDetails.idPhotoExpiration)}
                 </Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   ID Number
                 </Typography>
-                <Typography variant="body2">{detail.idPhotoNo}</Typography>
+                <Typography variant="body2">{userDetails.idPhotoNo}</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2}>
@@ -182,7 +217,7 @@ class KycDetails extends React.Component {
                 </Typography>
                 <img
                   className="image-photo"
-                  src={detail.idPhotoFrontUrl}
+                  src={userDetails.idPhotoFrontUrl}
                   alt="Issued ID"
                 />
               </Grid>
@@ -192,7 +227,7 @@ class KycDetails extends React.Component {
                 </Typography>
                 <img
                   className="image-photo"
-                  src={detail.selfieUrl}
+                  src={userDetails.selfieUrl}
                   alt="Selfie with ID"
                 />
               </Grid>
@@ -213,18 +248,18 @@ class KycDetails extends React.Component {
                   Current Address
                 </Typography>
                 <Typography variant="body2">
-                  {(detail.presentAddress.street_address &&
-                    detail.presentAddress.street_address +
+                  {(userDetails.presentAddress.street_address &&
+                    userDetails.presentAddress.street_address +
                       " " +
-                      detail.presentAddress.address_info +
+                      userDetails.presentAddress.address_info +
                       ", " +
-                      detail.presentAddress.barangay +
+                      userDetails.presentAddress.barangay +
                       ", " +
-                      detail.presentAddress.city +
+                      userDetails.presentAddress.city +
                       ", " +
-                      detail.presentAddress.state +
+                      userDetails.presentAddress.state +
                       " " +
-                      detail.presentAddress.zip_code) ||
+                      userDetails.presentAddress.zip_code) ||
                     ""}
                 </Typography>
               </Grid>
@@ -233,18 +268,18 @@ class KycDetails extends React.Component {
                   Permanent Address
                 </Typography>
                 <Typography variant="body2">
-                  {(detail.permanentAddress.street_address &&
-                    detail.permanentAddress.street_address +
+                  {(userDetails.permanentAddress.street_address &&
+                    userDetails.permanentAddress.street_address +
                       " " +
-                      detail.permanentAddress.address_info +
+                      userDetails.permanentAddress.address_info +
                       ", " +
-                      detail.permanentAddress.barangay +
+                      userDetails.permanentAddress.barangay +
                       ", " +
-                      detail.permanentAddress.city +
+                      userDetails.permanentAddress.city +
                       ", " +
-                      detail.permanentAddress.state +
+                      userDetails.permanentAddress.state +
                       " " +
-                      detail.permanentAddress.zip_code) ||
+                      userDetails.permanentAddress.zip_code) ||
                     ""}
                 </Typography>
               </Grid>
@@ -253,11 +288,12 @@ class KycDetails extends React.Component {
                   Proof of Address
                 </Typography>
                 <Typography variant="body2">
-                  Type of Document: {detail.permanentAddress.billing_statement}
+                  Type of Document:{" "}
+                  {userDetails.permanentAddress.billing_statement}
                 </Typography>
                 <img
                   className="image-photo"
-                  src={detail.permanentAddress.billing_statement_photo_url}
+                  src={userDetails.permanentAddress.billing_statement_photo_url}
                   alt="Billing statement"
                 />
               </Grid>
@@ -278,11 +314,7 @@ class KycDetails extends React.Component {
                   Employment Category
                 </Typography>
                 <Typography variant="body2">
-                  {detail.employmentCategory}
-                  {/* occupation: (level4.employed && level4.employed.occupation) || {},
-                  position: (level4.employed && level4.employed.position) || {},
-                  industry: (level4.employed && level4.employed.industry) || {},
-                  company: (level4.employed && level4.employed.company) || {}, */}
+                  {userDetails.employmentCategory}
                 </Typography>
               </Grid>
               <Grid item xs={3}>
@@ -290,7 +322,7 @@ class KycDetails extends React.Component {
                   Occupation
                 </Typography>
                 <Typography variant="body2">
-                  {detail.occupationDetails.occupation}
+                  {/* {userDetails.occupationDetails.occupation} */}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
@@ -298,13 +330,13 @@ class KycDetails extends React.Component {
                   Position
                 </Typography>
                 <Typography variant="body2">
-                  {detail.occupationDetails.position}
+                  {/* {userDetails.occupationDetails.position} */}
                 </Typography>
                 <Typography variant="body1" className="detail-label">
                   Proof of Income
                 </Typography>
                 <Typography variant="body2">
-                  Type of Document: {detail.documentType}
+                  Type of Document: {userDetails.documentType}
                 </Typography>
               </Grid>
             </Grid>
@@ -314,7 +346,7 @@ class KycDetails extends React.Component {
                   Company Name/Business Name
                 </Typography>
                 <Typography variant="body2">
-                  {detail.occupationDetails.company}
+                  {/* {userDetails.occupationDetails.company} */}
                 </Typography>
               </Grid>
               <Grid item xs={3}>
@@ -322,7 +354,7 @@ class KycDetails extends React.Component {
                   Industry
                 </Typography>
                 <Typography variant="body2">
-                  {detail.occupationDetails.industry}
+                  {/* {userDetails.occupationDetails.industry} */}
                 </Typography>
               </Grid>
               <Grid item xs={3}>
@@ -350,17 +382,19 @@ class KycDetails extends React.Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {historyData.map((data) => (
-                  <TableRow key={data.id}>
-                    <TableCell component="th" scope="row">
-                      {data.level}
+                {history.map((historyList) => (
+                  <TableRow className="table-row">
+                    <TableCell>{historyList.level}</TableCell>
+                    <TableCell>
+                      {formatDate(historyList.dateSubmitted)}
                     </TableCell>
-                    <TableCell align="left">{data.submissionDate}</TableCell>
-                    <TableCell align="left">{data.reviewDate}</TableCell>
-                    <TableCell align="left">{data.status}</TableCell>
-                    <TableCell align="left">{data.reviewer}</TableCell>
-                    <TableCell align="left">{data.remarks}</TableCell>
-                    <TableCell align="left">{data.lastEditBy}</TableCell>
+                    <TableCell>{formatDate(historyList.review_date)}</TableCell>
+                    <TableCell>{historyList.status}</TableCell>
+                    <TableCell>{historyList.reviewer}</TableCell>
+                    <TableCell>{historyList.remarks}</TableCell>
+                    <TableCell>
+                      {formatDate(historyList.last_edit_date)}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -376,13 +410,13 @@ class KycDetails extends React.Component {
             spacing={3}
           >
             <Grid item xs={1}>
-              <ApproveModal userInfo={detail.id} />
+              <ApproveModal userId={userDetails.id} />
             </Grid>
             <Grid item xs={1}>
-              <DeclineModal userInfo={detail.id} />
+              <DeclineModal userId={userDetails.id} />
             </Grid>
             <Grid item xs={1}>
-              <EscalateModal userInfo={detail.id} />
+              <EscalateModal userId={userDetails.id} />
             </Grid>
           </Grid>
         </div>
