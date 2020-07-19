@@ -11,17 +11,36 @@
     padding: 2em;
 
     h1 {
-      font-size: 1.2em;
-      margin-top: 0.5rem;
+      font-size: 1rem;
+      margin-top: 1rem;
+      color: $secondary;
     }
   }
 
   .form-wrapper {
+    margin-top: 2rem;
+
+    label {
+      color: $secondary;
+      font-size: 18px;
+      font-weight: 500;
+
+      +.MuiInput-formControl {
+        margin-top: 1.5rem;
+      }
+    }
+
+    .MuiInput-underline:after {
+      border-bottom-color: $primary;
+    }
+
     .btn-primary {
       background-color: $primary;
-      margin-top: 1rem;
+      margin-top: 2rem;
       border-radius: 30px;
       color: $secondary;
+      min-height: 38px;
+      text-transform: capitalize;
     }
   }
 }

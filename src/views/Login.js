@@ -1,58 +1,3 @@
-// import React, { Component } from "react";
-// import FirebaseConfig from "../config/FirebaseConfig";
-// import {
-//   Box,
-//   Button,
-//   Container,
-//   Grid,
-//   Link,
-//   Paper,
-//   TextField,
-// } from "@material-ui/core";
-// import Logo from "../assets/images/logo.svg";
-// import { AuthContext } from "../auth/Auth";
-
-// class Login extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.login = this.login.bind(this);
-//     this.handleChange = this.handleChange.bind(this);
-//     this.state = {
-//       email: "",
-//       password: "",
-//       errorMessage: null,
-//     };
-//   }
-
-//   login(e) {
-//     e.preventDefault();
-//     FirebaseConfig.auth()
-//       .signInWithEmailAndPassword(this.state.email, this.state.password)
-//       .then((res) => {})
-//       .catch((error) => {
-//         console.log(error);
-//         this.setState({ errorMessage: error.message });
-//       });
-//   }
-
-//   handleChange(e) {
-//     this.setState({ [e.target.name]: e.target.value });
-//     console.log({ [e.target.name]: e.target.value });
-//   }
-
-//   const { currentUser } = useContext(AuthContext);
-
-//   if (currentUser) {
-//     return <Redirect to="/dashboard" />
-//   }
-
-//   render() {
-
-// }
-// }
-
-// export default Login;
-
 import React, { useCallback, useContext } from "react";
 import { withRouter, Redirect } from "react-router";
 import FirebaseConfig from "../config/FirebaseConfig";
@@ -92,22 +37,6 @@ const Login = ({ history }) => {
     return <Redirect to="/kyc" />;
   }
 
-  // return (
-  //   <div>
-  //     <h1>Log in</h1>
-  //     <form onSubmit={handleLogin}>
-  //       <label>
-  //         Email
-  //         <input name="email" type="email" placeholder="Email" />
-  //       </label>
-  //       <label>
-  //         Password
-  //         <input name="password" type="password" placeholder="Password" />
-  //       </label>
-  //       <button type="submit">Log in</button>
-  //     </form>
-  //   </div>
-  // );
   return (
     <Box p={2} className="login-wrapper">
       {/* <Container maxWidth="xs"> */}
@@ -118,7 +47,7 @@ const Login = ({ history }) => {
         alignItems="center"
         justify="center"
       >
-        <Grid item xs={2}>
+        <Grid item xs={3}>
           <Paper elevation={3} className="form-container">
             <Box display="flex" alignItems="center" flexDirection="column">
               <img className="logo" src={Logo} alt="Logo" />
@@ -158,7 +87,12 @@ const Login = ({ history }) => {
               />
               <Grid container>
                 <Grid item xs align="end">
-                  <Link to="passwordReset" variant="body2" color="#01AFF7">
+                  <Link
+                    to="passwordReset"
+                    className="link-text"
+                    variant="body2"
+                    color="#49c0f9"
+                  >
                     Forgot password?
                   </Link>
                 </Grid>
