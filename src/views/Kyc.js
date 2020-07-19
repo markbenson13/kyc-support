@@ -36,78 +36,6 @@ const allColumn = [
   { id: "action", title: "Action" },
 ];
 
-const pendingData = [
-  {
-    id: "1",
-    name: "Rohan",
-    email: "deusexmachina892",
-    dateSubmitted: "06/25/2020",
-    level: "Level 3",
-    customerType: "Individual",
-    pepScan: "Negative",
-    openedBy: "Winnie 06/25/2020 4:30",
-    action: "View",
-    _unique: "ID",
-  },
-  {
-    id: "2",
-    name: "Rohan",
-    email: "deusexmachina892",
-    dateSubmitted: "06/25/2020",
-    level: "Level 3",
-    customerType: "Individual",
-    pepScan: "Negative",
-    openedBy: "Winnie 06/25/2020 4:30",
-    action: "View",
-    _unique: "ID",
-  },
-  {
-    id: "3",
-    name: "Rohan",
-    email: "deusexmachina892",
-    dateSubmitted: "06/25/2020",
-    level: "Level 3",
-    customerType: "Individual",
-    pepScan: "Negative",
-    openedBy: "Winnie 06/25/2020 4:30",
-    action: "View",
-    _unique: "ID",
-  },
-];
-
-const allData = [
-  {
-    name: "Rohan",
-    email: "deusexmachina892",
-    lastEditBy: "Winnie 06/25/2020 1:15",
-    level: "Level 3",
-    status: "Denies",
-    feedback: "Your documents do not match",
-    action: "View",
-    _unique: "ID",
-  },
-  {
-    name: "Rohan",
-    email: "deusexmachina892",
-    lastEditBy: "Winnie 06/25/2020 1:15",
-    level: "Level 3",
-    status: "Escalated",
-    feedback: "Complete documents",
-    action: "View",
-    _unique: "ID",
-  },
-  {
-    name: "Rohan",
-    email: "deusexmachina892",
-    lastEditBy: "Winnie 06/25/2020 1:15",
-    level: "Level 3",
-    status: "Escalated",
-    feedback: "Your note does not contain the correct information",
-    action: "View",
-    _unique: "ID",
-  },
-];
-
 class Kyc extends React.Component {
   constructor(props) {
     super(props);
@@ -150,11 +78,11 @@ class Kyc extends React.Component {
           return map;
         }, {});
 
-        // Object.keys(userMap).map((users) => {
-        //   console.log("users", users);
-        // });
+        Object.keys(userMap).map((users) => {
+          console.log("users", users);
+        });
 
-        // console.log("usermap", userMap);
+        console.log("usermap", userMap);
 
         const userList = Object.keys(userMap).map((userId) => {
           const {
@@ -178,6 +106,8 @@ class Kyc extends React.Component {
               {}
             : {};
 
+          console.log("newscan", newscan.numberOfPepMatches);
+
           return {
             id: userId,
             first_name: data.first_name || "",
@@ -200,7 +130,7 @@ class Kyc extends React.Component {
             mobileNo: wallet[0].mobileNo || "",
             level: status.current_level || "",
             status: status.level_2[1].status || "",
-            pepMatch: newscan.numberOfPepMatches,
+            pepMatch: newscan.numberOfPepMatches === 0 ? "Negative" : "",
             presentAddress: level3.present_address || {},
             permanentAddress: level3.permanent_address || {},
             documentPhotoUrl: level4.document_photo_url || "",
@@ -252,7 +182,7 @@ class Kyc extends React.Component {
             </div>
             <Table className="table" aria-label="custom pagination table">
               <TableHead>
-                <TableRow>
+                <TableRow className="table-head">
                   {pendingColumn.map(({ id, title }) => (
                     <TableCell key={id}>{title}</TableCell>
                   ))}
@@ -302,7 +232,7 @@ class Kyc extends React.Component {
             </div>
             <Table className="table" aria-label="custom pagination table">
               <TableHead>
-                <TableRow>
+                <TableRow className="table-head">
                   {allColumn.map(({ id, title }) => (
                     <TableCell key={id}>{title}</TableCell>
                   ))}

@@ -219,7 +219,7 @@ class Customers extends React.Component {
             </div>
             <Table className="table" aria-label="custom pagination table">
               <TableHead>
-                <TableRow>
+                <TableRow className="table-head">
                   {customersColumn.map(({ id, title }) => (
                     <TableCell key={id}>{title}</TableCell>
                   ))}

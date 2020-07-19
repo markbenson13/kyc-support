@@ -10,6 +10,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import Avatar from "../assets/images/icons/user.png";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -145,13 +146,15 @@ const Header = () => {
       <AppBar position="static" className="header-wrapper">
         <div className="header-container">
           <Toolbar>
-            <Typography className={classes.title} variant="h1" noWrap>
-              LoyalWallet
-            </Typography>
+            <div className="header-logo">
+              <Typography className={classes.title} variant="h1" noWrap>
+                LoyalWallet
+              </Typography>
+            </div>
 
-            {headerMenu()}
+            <div classname="header-menu">{headerMenu()}</div>
 
-            <div className={classes.sectionDesktop}>
+            <div className="right-widget">
               <IconButton
                 edge="end"
                 aria-label="account of current user"
@@ -160,6 +163,7 @@ const Header = () => {
                 onClick={handleProfileMenuOpen}
                 color="primary"
                 size="small"
+                className="profile-btn"
               >
                 Hi, Appso
                 <KeyboardArrowDownIcon />
@@ -172,6 +176,7 @@ const Header = () => {
                 onClick={() => FirebaseConfig.auth().signOut()}
                 color="primary"
                 size="small"
+                className="logout-btn"
               >
                 <PowerSettingsNewIcon />
                 Logout

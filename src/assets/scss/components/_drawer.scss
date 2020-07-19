@@ -5,6 +5,7 @@
   >div {
     background-color: $secondary;
     width: 120px;
+    border-right: 0;
   }
 
   .nav-menu {
@@ -21,6 +22,7 @@
     color: $white;
     font-size: 14px;
     text-decoration: none;
+    position: relative;
 
     .icon {
       width: 25px;
@@ -55,6 +57,18 @@
       .accounts {
         background-image: url("../images/icons/accounts-active.png");
       }
+
+      &:before {
+        content: "";
+        background-image: url("../images/icons/sidebar-active.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 25px;
+        height: 60px;
+        position: absolute;
+        right: -10px;
+        top: -5px;
+      }
     }
   }
 }
@@ -70,5 +84,7 @@
     border-radius: 50%;
     padding: 2px;
     background-color: $white;
+    width: 100%;
+    max-width: 45px;
   }
 }
