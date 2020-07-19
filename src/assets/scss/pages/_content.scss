@@ -40,6 +40,11 @@
       padding: 1em 0;
       border-bottom: 1px solid #e8e8e8;
     }
+
+    .MuiGrid-grid-xs-3,
+    .MuiGrid-grid-xs-6 {
+      margin-bottom: 2rem;
+    }
   }
 
   .button-actions {
