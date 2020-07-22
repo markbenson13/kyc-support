@@ -44,16 +44,20 @@ class ApproveModal extends React.Component {
     const userId = this.state.userId;
     console.log("userId", userId);
 
+    // const time = new Date().getTime();
+    // const date = new Date(time);
+
     var historyRef = firebase
       .database()
       .ref("/user_kyc/" + userId + "/history")
       .push();
 
     var postHistory = {
-      status: "Completed",
+      id: userId,
+      status: "Approved",
       review_date: Date.now(),
       reviewer: this.state.adminInfo.email,
-      remarks: "",
+      remarks: "Approved",
       last_edit_date: Date.now(),
     };
     historyRef.set(postHistory);

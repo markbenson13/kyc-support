@@ -64,6 +64,7 @@ class Customers extends React.Component {
 
     this.state = {
       users: [],
+      user_history: [],
     };
   }
 
@@ -187,10 +188,32 @@ class Customers extends React.Component {
               (!!Object.keys(newEmployed).length && "Employed") ||
               (!!Object.keys(newSelfEmployed).length && "Self Employed") ||
               "",
+            history: (history_list && history_list) || {},
           };
         });
 
         this.setState({ users: userList });
+
+        this.state.users.length &&
+          this.state.users.map((user) => {
+            let latestDate = "";
+            let latestHistory = "";
+
+            Object.keys(user.history).map((history_item) => {
+              if (!latestDate) {
+                latestDate = user.history[history_item].last_edit_date;
+                latestHistory = user.history[history_item];
+              } else {
+                if (latestDate < user.history[history_item].last_edit_date) {
+                  latestDate = user.history[history_item].last_edit_date;
+                  latestHistory = user.history[history_item];
+                }
+              }
+              const userHistory = this.state.user_history;
+              userHistory[latestHistory.id] = latestHistory;
+              this.setState({ user_history: userHistory });
+            });
+          });
       }
     );
   }
@@ -240,7 +263,12 @@ class Customers extends React.Component {
                       <TableCell>{formatDate(user.dateSubmitted)}</TableCell>
                       <TableCell>Level {user.level}</TableCell>
                       <TableCell>{user.customerType}</TableCell>
-                      <TableCell>{user.pepMatch}</TableCell>
+                      {Object.keys(user.history).length &&
+                        Object.keys(user.history).map((user_history) => (
+                          <TableCell>
+                            {user.history[user_history].remarks}
+                          </TableCell>
+                        ))}
                       <TableCell align="center">
                         <Link
                           to={{

@@ -46,6 +46,7 @@ class Kyc extends React.Component {
       sanctions_list: [],
       status: [],
       user_wallet: [],
+      user_history: [],
     };
   }
 
@@ -79,7 +80,7 @@ class Kyc extends React.Component {
         }, {});
 
         Object.keys(userMap).map((users) => {
-          console.log("users", users);
+          // console.log("users", users);
         });
 
         console.log("usermap", userMap);
@@ -90,6 +91,14 @@ class Kyc extends React.Component {
             walletData,
           } = userMap[userId];
 
+          // const history_list =
+          //   history &&
+          //   Object.keys(history).map((history_item) => {
+          //     return history[history_item];
+          //   });
+
+          // console.log("list", history_list);
+
           const data = newData.level_2 ? JSON.parse(newData.level_2) : {};
           const level3 = newData.level_3 ? JSON.parse(newData.level_3) : {};
           const level4 = newData.level_4 ? JSON.parse(newData.level_4) : {};
@@ -97,16 +106,17 @@ class Kyc extends React.Component {
           const status = newStatus ? JSON.parse(newStatus) : {};
           const wallet = walletData.data ? JSON.parse(walletData.data) : {};
           const history_list = history;
-          const newEmployed = level4.employed
-            ? (level4.employed === typeof Object && level4.employed) || {}
-            : {};
-          const newSelfEmployed = level4.self_employed
-            ? (level4.self_employed === typeof Object &&
-                level4.self_employed) ||
-              {}
-            : {};
+          // const newEmployed = level4.employed
+          //   ? (level4.employed === typeof Object && level4.employed) || {}
+          //   : {};
+          // const newSelfEmployed = level4.self_employed
+          //   ? (level4.self_employed === typeof Object &&
+          //       level4.self_employed) ||
+          //     {}
+          //   : {};
 
-          console.log("newscan", newscan.numberOfPepMatches);
+          // console.log("newscan", newscan.numberOfPepMatches);
+          // console.log("history-item", history_list);
 
           return {
             id: userId,
@@ -135,20 +145,45 @@ class Kyc extends React.Component {
             permanentAddress: level3.permanent_address || {},
             documentPhotoUrl: level4.document_photo_url || "",
             documentType: level4.document_type || "",
-            occupationDetails:
-              (!!Object.keys(newEmployed).length && newEmployed) ||
-              (!!Object.keys(newSelfEmployed).length && newSelfEmployed) ||
-              {},
-            employmentCategory:
-              (!!Object.keys(newEmployed).length && "Employed") ||
-              (!!Object.keys(newSelfEmployed).length && "Self Employed") ||
-              "",
-            history: history_list || {},
+            occupation: (level4.employed && level4.employed.occupation) || "",
+            position: (level4.employed && level4.employed.position) || "",
+            industry: (level4.employed && level4.employed.industry) || "",
+            company: (level4.employed && level4.employed.company) || "",
+            // occupationDetails:
+            //   (!!Object.keys(newEmployed).length && newEmployed) ||
+            //   (!!Object.keys(newSelfEmployed).length && newSelfEmployed) ||
+            //   {},
+            // employmentCategory:
+            //   (!!Object.keys(newEmployed).length && "Employed") ||
+            //   (!!Object.keys(newSelfEmployed).length && "Self Employed") ||
+            //   "",
+            history: (history_list && history_list) || {},
           };
         });
 
         console.log("userlist", userList);
         this.setState({ users: userList });
+
+        this.state.users.length &&
+          this.state.users.map((user) => {
+            let latestDate = "";
+            let latestHistory = "";
+
+            Object.keys(user.history).map((history_item) => {
+              if (!latestDate) {
+                latestDate = user.history[history_item].last_edit_date;
+                latestHistory = user.history[history_item];
+              } else {
+                if (latestDate < user.history[history_item].last_edit_date) {
+                  latestDate = user.history[history_item].last_edit_date;
+                  latestHistory = user.history[history_item];
+                }
+              }
+              const userHistory = this.state.user_history;
+              userHistory[latestHistory.id] = latestHistory;
+              this.setState({ user_history: userHistory });
+            });
+          });
       }
     );
   }
@@ -159,10 +194,7 @@ class Kyc extends React.Component {
       return new Date(string).toLocaleDateString([], options);
     }
 
-    // const person = this.state.users;
-    // JSON.parse(person).map((user) => {
-    //   console.log("user", user);
-    // });
+    const history = this.state.user_history;
 
     return (
       <>
@@ -204,7 +236,15 @@ class Kyc extends React.Component {
                       <TableCell>Level {user.level}</TableCell>
                       <TableCell>{user.customerType}</TableCell>
                       <TableCell>{user.pepMatch}</TableCell>
-                      <TableCell>{formatDate(user.dateUpdated)}</TableCell>
+                      {Object.keys(user.history) &&
+                        Object.keys(user.history).map((user_history) => (
+                          <TableCell>
+                            {formatDate(
+                              user.history[user_history].last_edit_date
+                            )}
+                          </TableCell>
+                        ))}
+
                       <TableCell align="center">
                         <Link
                           to={{
@@ -250,10 +290,32 @@ class Kyc extends React.Component {
                           user.last_name}
                       </TableCell>
                       <TableCell>{user.email}</TableCell>
-                      <TableCell>{formatDate(user.dateSubmitted)}</TableCell>
+                      {Object.keys(user.history) &&
+                        Object.keys(user.history).map((user_history) => (
+                          <TableCell>
+                            {user.history
+                              ? user.history[user_history].reviewer +
+                                " " +
+                                formatDate(
+                                  user.history[user_history].last_edit_date
+                                )
+                              : user.dateUpdated}
+                          </TableCell>
+                        ))}
+
                       <TableCell>Level {user.level}</TableCell>
-                      <TableCell>{user.status}</TableCell>
-                      <TableCell>{user.history.remarks}</TableCell>
+
+                      {Object.keys(user.history) &&
+                        Object.keys(user.history).map((user_history) => (
+                          <>
+                            <TableCell>
+                              {user.history[user_history].status}
+                            </TableCell>
+                            <TableCell>
+                              {user.history[user_history].remarks}
+                            </TableCell>
+                          </>
+                        ))}
                       <TableCell align="center">
                         <Link
                           to={{

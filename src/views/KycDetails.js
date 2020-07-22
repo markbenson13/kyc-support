@@ -411,13 +411,9 @@ class KycDetails extends React.Component {
             alignItems="center"
             spacing={3}
           >
-            <Grid item xs={1}>
+            <Grid item xs={3}>
               <ApproveModal userId={userDetails.id} />
-            </Grid>
-            <Grid item xs={1}>
               <DeclineModal userId={userDetails.id} />
-            </Grid>
-            <Grid item xs={1}>
               <EscalateModal userId={userDetails.id} />
             </Grid>
           </Grid>
