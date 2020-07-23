@@ -194,8 +194,6 @@ class Kyc extends React.Component {
       return new Date(string).toLocaleDateString([], options);
     }
 
-    const history = this.state.user_history;
-
     return (
       <>
         <Sidebar />
@@ -222,41 +220,48 @@ class Kyc extends React.Component {
               </TableHead>
               <TableBody>
                 {this.state.users.length &&
-                  this.state.users.map((user, key) => (
-                    <TableRow key={user.id} className="table-row">
-                      <TableCell>
-                        {user.first_name +
-                          " " +
-                          user.middle_name +
-                          " " +
-                          user.last_name}
-                      </TableCell>
-                      <TableCell>{user.email}</TableCell>
-                      <TableCell>{formatDate(user.dateSubmitted)}</TableCell>
-                      <TableCell>Level {user.level}</TableCell>
-                      <TableCell>{user.customerType}</TableCell>
-                      <TableCell>{user.pepMatch}</TableCell>
-                      {Object.keys(user.history) &&
-                        Object.keys(user.history).map((user_history) => (
-                          <TableCell>
-                            {formatDate(
-                              user.history[user_history].last_edit_date
-                            )}
-                          </TableCell>
-                        ))}
+                  this.state.users.map((user) => {
+                    const historyKeys = Object.keys(user.history);
+                    const targetHistoryKeysIndex = historyKeys.length - 1;
+                    const keyIndex = historyKeys[targetHistoryKeysIndex];
+                    const selectedObj = user.history[keyIndex] || "";
 
-                      <TableCell align="center">
-                        <Link
-                          to={{
-                            pathname: `/user/${user.id}`,
-                            state: { user: user },
-                          }}
-                        >
-                          View
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                    if (user.status === "under review") {
+                      return (
+                        <TableRow className="table-row">
+                          <TableCell>
+                            {user.first_name +
+                              " " +
+                              user.middle_name +
+                              " " +
+                              user.last_name}
+                          </TableCell>
+                          <TableCell>{user.email}</TableCell>
+                          <TableCell>
+                            {formatDate(user.dateSubmitted)}
+                          </TableCell>
+                          <TableCell>Level {user.level}</TableCell>
+                          <TableCell>{user.customerType}</TableCell>
+                          <TableCell>{user.pepMatch}</TableCell>
+                          <TableCell>
+                            {selectedObj.last_edit_date &&
+                              formatDate(selectedObj.last_edit_date)}
+                          </TableCell>
+
+                          <TableCell align="center">
+                            <Link
+                              to={{
+                                pathname: `/user/${user.id}`,
+                                state: { user: user },
+                              }}
+                            >
+                              View
+                            </Link>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    }
+                  })}
               </TableBody>
             </Table>
           </TableContainer>
@@ -280,54 +285,49 @@ class Kyc extends React.Component {
               </TableHead>
               <TableBody>
                 {this.state.users.length &&
-                  this.state.users.map((user) => (
-                    <TableRow key={user.id} className="table-row">
-                      <TableCell>
-                        {user.first_name +
-                          " " +
-                          user.middle_name +
-                          " " +
-                          user.last_name}
-                      </TableCell>
-                      <TableCell>{user.email}</TableCell>
-                      {Object.keys(user.history) &&
-                        Object.keys(user.history).map((user_history) => (
-                          <TableCell>
-                            {user.history
-                              ? user.history[user_history].reviewer +
-                                " " +
-                                formatDate(
-                                  user.history[user_history].last_edit_date
-                                )
-                              : user.dateUpdated}
-                          </TableCell>
-                        ))}
+                  this.state.users.map((user) => {
+                    const historyKeys = Object.keys(user.history);
+                    const targetHistoryKeysIndex = historyKeys.length - 1;
+                    const keyIndex = historyKeys[targetHistoryKeysIndex];
+                    const selectedObj = user.history[keyIndex] || "";
 
-                      <TableCell>Level {user.level}</TableCell>
+                    return (
+                      <TableRow key={user.id} className="table-row">
+                        <TableCell>
+                          {user.first_name +
+                            " " +
+                            user.middle_name +
+                            " " +
+                            user.last_name}
+                        </TableCell>
+                        <TableCell>{user.email}</TableCell>
+                        <TableCell>
+                          {selectedObj &&
+                            selectedObj.reviewer +
+                              " " +
+                              formatDate(selectedObj.last_edit_date)}
+                        </TableCell>
 
-                      {Object.keys(user.history) &&
-                        Object.keys(user.history).map((user_history) => (
-                          <>
-                            <TableCell>
-                              {user.history[user_history].status}
-                            </TableCell>
-                            <TableCell>
-                              {user.history[user_history].remarks}
-                            </TableCell>
-                          </>
-                        ))}
-                      <TableCell align="center">
-                        <Link
-                          to={{
-                            pathname: `/user/${user.id}`,
-                            state: { user: user },
-                          }}
-                        >
-                          View
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                        <TableCell>Level {user.level}</TableCell>
+                        <TableCell>
+                          {selectedObj && selectedObj.status}
+                        </TableCell>
+                        <TableCell>
+                          {selectedObj && selectedObj.remarks}
+                        </TableCell>
+                        <TableCell align="center">
+                          <Link
+                            to={{
+                              pathname: `/user/${user.id}`,
+                              state: { user: user },
+                            }}
+                          >
+                            View
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
               </TableBody>
             </Table>
           </TableContainer>

@@ -250,37 +250,39 @@ class Customers extends React.Component {
               </TableHead>
               <TableBody>
                 {users &&
-                  users.map((user, key) => (
-                    <TableRow key={key} className="table-row">
-                      <TableCell>
-                        {user.first_name +
-                          " " +
-                          user.middle_name +
-                          " " +
-                          user.last_name}
-                      </TableCell>
-                      <TableCell>{user.email}</TableCell>
-                      <TableCell>{formatDate(user.dateSubmitted)}</TableCell>
-                      <TableCell>Level {user.level}</TableCell>
-                      <TableCell>{user.customerType}</TableCell>
-                      {Object.keys(user.history).length &&
-                        Object.keys(user.history).map((user_history) => (
-                          <TableCell>
-                            {user.history[user_history].remarks}
-                          </TableCell>
-                        ))}
-                      <TableCell align="center">
-                        <Link
-                          to={{
-                            pathname: `/user/${user.id}`,
-                            state: { user: user },
-                          }}
-                        >
-                          View
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  users.map((user, key) => {
+                    const historyKeys = Object.keys(user.history);
+                    const targetHistoryKeysIndex = historyKeys.length - 1;
+                    const keyIndex = historyKeys[targetHistoryKeysIndex];
+                    const selectedObj = user.history[keyIndex] || "";
+
+                    return (
+                      <TableRow key={key} className="table-row">
+                        <TableCell>
+                          {user.first_name +
+                            " " +
+                            user.middle_name +
+                            " " +
+                            user.last_name}
+                        </TableCell>
+                        <TableCell>{user.email}</TableCell>
+                        <TableCell>{formatDate(user.dateSubmitted)}</TableCell>
+                        <TableCell>Level {user.level}</TableCell>
+                        <TableCell>{selectedObj.remarks}</TableCell>
+                        <TableCell>{selectedObj.remarks}</TableCell>
+                        <TableCell align="center">
+                          <Link
+                            to={{
+                              pathname: `/user/${user.id}`,
+                              state: { user: user },
+                            }}
+                          >
+                            View
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
               </TableBody>
             </Table>
           </TableContainer>

@@ -13,7 +13,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import TableFilter from "../components/TableFilter";
 import { Typography } from "@material-ui/core";
-import { Link } from "@material-ui/core";
+import { Link } from "react-router-dom";
 import { db } from "../config/FirebaseConfig";
 
 const amlaColumn = [
@@ -22,33 +22,6 @@ const amlaColumn = [
   { id: "lastUpdateby", title: "Last Update By" },
   { id: "lastOpenedby", title: "Last Opened By" },
   { id: "action", title: "Action" },
-];
-
-const amlaData = [
-  {
-    id: 1,
-    name: "Rodrigo Roa Duterte",
-    lastUpdateby: "Winnie 06/25/2020 10:20",
-    lastOpenedBy: "Winnie 06/25/2020 10:20",
-    action: "View",
-    _unique: "ID",
-  },
-  {
-    id: 2,
-    name: "Benigno Aquino Jr.",
-    lastUpdateby: "Winnie 06/25/2020 10:20",
-    lastOpenedBy: "Winnie 06/25/2020 10:20",
-    action: "View",
-    _unique: "ID",
-  },
-  {
-    id: 3,
-    name: "Gloria Macapagal Arroyo",
-    lastUpdateby: "Winnie 06/25/2020 10:20",
-    lastOpenedBy: "Winnie 06/25/2020 10:20",
-    action: "View",
-    _unique: "ID",
-  },
 ];
 
 class Amla extends React.Component {
@@ -105,14 +78,14 @@ class Amla extends React.Component {
           const status = newStatus ? JSON.parse(newStatus) : {};
           const wallet = walletData.data ? JSON.parse(walletData.data) : {};
           const history_list = history;
-          const newEmployed = level4.employed
-            ? (level4.employed === typeof Object && level4.employed) || {}
-            : {};
-          const newSelfEmployed = level4.self_employed
-            ? (level4.self_employed === typeof Object &&
-                level4.self_employed) ||
-              {}
-            : {};
+          // const newEmployed = level4.employed
+          //   ? (level4.employed === typeof Object && level4.employed) || {}
+          //   : {};
+          // const newSelfEmployed = level4.self_employed
+          //   ? (level4.self_employed === typeof Object &&
+          //       level4.self_employed) ||
+          //     {}
+          //   : {};
 
           return {
             id: userId,
@@ -141,28 +114,17 @@ class Amla extends React.Component {
             permanentAddress: level3.permanent_address || {},
             documentPhotoUrl: level4.document_photo_url || "",
             documentType: level4.document_type || "",
-            occupationDetails:
-              (!!Object.keys(newEmployed).length && newEmployed) ||
-              (!!Object.keys(newSelfEmployed).length && newSelfEmployed) ||
-              {},
-            employmentCategory:
-              (!!Object.keys(newEmployed).length && "Employed") ||
-              (!!Object.keys(newSelfEmployed).length && "Self Employed") ||
-              "",
+            // occupationDetails:
+            //   (!!Object.keys(newEmployed).length && newEmployed) ||
+            //   (!!Object.keys(newSelfEmployed).length && newSelfEmployed) ||
+            //   {},
+            // employmentCategory:
+            //   (!!Object.keys(newEmployed).length && "Employed") ||
+            //   (!!Object.keys(newSelfEmployed).length && "Self Employed") ||
+            //   "",
             history: history_list || {},
           };
         });
-
-        // this.setState({ users: userIds });
-
-        // console.log("state", this.state.users);
-
-        // userIds.map((data) => {
-        //   console.log("users", data);
-        //   this.setState({ users: data }, function () {
-        //     console.log("state", this.state.users);
-        //   });
-        // });
         this.setState({ users: userList });
       }
     );
@@ -170,7 +132,18 @@ class Amla extends React.Component {
 
   render() {
     const { users } = this.state;
-    console.log("state", users);
+
+    function formatDate(string) {
+      var options = { month: "numeric", day: "numeric", year: "numeric" };
+      return new Date(string).toLocaleDateString([], options);
+    }
+
+    function counter() {
+      for (let i = 1; i > 1; i++) {
+        return i;
+      }
+    }
+
     return (
       <div>
         <Sidebar />
@@ -189,27 +162,59 @@ class Amla extends React.Component {
             </div>
             <Table className="table" aria-label="custom pagination table">
               <TableHead className="table-head">
-                <TableRow className="table-row">
+                <TableRow className="table-head">
                   {amlaColumn.map(({ id, title }) => (
                     <TableCell key={id}>{title}</TableCell>
                   ))}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {/* {users.length &&
-                  users.map((data, key) => (
-                    <TableRow key={key}>
-                      <TableCell component="th" scope="row">
-                        {key}
-                      </TableCell>
-                      <TableCell align="left">{data}</TableCell>
-                      <TableCell align="left">{data.lastUpdateby}</TableCell>
-                      <TableCell align="left">{data.lastOpenedBy}</TableCell>
-                      <TableCell align="center">
-                        <Link>View</Link>
-                      </TableCell>
-                    </TableRow>
-                  ))} */}
+                {users &&
+                  users.map((user, key) => {
+                    const historyKeys = Object.keys(user.history);
+                    const targetHistoryKeysIndex = historyKeys.length - 1;
+                    const keyIndex = historyKeys[targetHistoryKeysIndex];
+                    const selectedObj = user.history[keyIndex] || "";
+                    const full_name =
+                      user.first_name +
+                      " " +
+                      user.middle_name +
+                      " " +
+                      user.last_name;
+
+                    if (user.pepMatch > 0) {
+                      return (
+                        <TableRow key={key}>
+                          <TableCell component="th" scope="row">
+                            {counter()}
+                          </TableCell>
+                          <TableCell align="left">{full_name}</TableCell>
+                          <TableCell align="left">
+                            {selectedObj &&
+                              selectedObj.reviewer +
+                                " " +
+                                formatDate(selectedObj.last_edit_date)}
+                          </TableCell>
+                          <TableCell align="left">
+                            {selectedObj &&
+                              selectedObj.reviewer +
+                                " " +
+                                formatDate(selectedObj.last_edit_date)}
+                          </TableCell>
+                          <TableCell align="center">
+                            <Link
+                              to={{
+                                pathname: `/user/${user.id}`,
+                                state: { user: user },
+                              }}
+                            >
+                              View
+                            </Link>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    }
+                  })}
               </TableBody>
             </Table>
           </TableContainer>

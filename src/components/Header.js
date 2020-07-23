@@ -152,7 +152,7 @@ const Header = () => {
               </Typography>
             </div>
 
-            <div classname="header-menu">{headerMenu()}</div>
+            <div className="header-menu">{headerMenu()}</div>
 
             <div className="right-widget">
               <IconButton
