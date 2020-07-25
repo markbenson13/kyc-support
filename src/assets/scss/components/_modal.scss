@@ -1,0 +1,81 @@
+//# Modals
+
+.modal-container {
+  .MuiDialog-paper {
+    min-width: 460px;
+    align-items: center;
+    border-radius: 10px;
+    padding: 2rem;
+
+    p {
+      font-size: 15px;
+    }
+
+    #alert-dialog-title {
+      padding: 0;
+
+      h2 {
+        font-size: 1rem;
+
+
+        img {
+          display: block;
+          max-width: 3rem;
+          margin: 0 auto 1rem;
+        }
+      }
+    }
+
+    .modal-content {
+      min-width: 360px;
+      text-align: center;
+
+      form {
+        margin-top: 2rem;
+
+        .input-field {
+          width: 100%;
+          margin-bottom: 1rem;
+
+          label {
+            font-size: 18px;
+            font-weight: 600;
+            color: $secondary;
+
+            &+.MuiInput-formControl {
+              margin-top: 2rem;
+
+              input {
+                border-bottom: 1px solid $gray;
+              }
+
+              &:after {
+                border-bottom-color: $primary;
+              }
+            }
+          }
+        }
+      }
+
+    }
+  }
+
+  .btn {
+    border-radius: 1.5rem;
+    color: $black;
+    text-transform: capitalize;
+    font-weight: 400;
+    min-width: 120px;
+    min-height: 38px;
+    margin: 0 0.5rem;
+    font-size: 13px;
+
+    &:hover {
+      background-color: $primary;
+    }
+
+    &.btn-secondary {
+      border-color: $primary
+    }
+  }
+}

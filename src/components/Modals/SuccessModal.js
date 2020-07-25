@@ -7,22 +7,23 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@material-ui/core";
-import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import SuccessIcon from "../../assets/images/icons/success.png";
 
 const SuccessModal = (props) => {
   return (
     <div className="modal-wrapper">
       <Dialog
+        className="modal-container"
         open={props.open}
         onClose={props.close}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          <CheckCircleOutlineIcon />
+          <img src={SuccessIcon} alt="Success icon" />
           {props.heading}
         </DialogTitle>
-        <DialogContent>
+        <DialogContent className="modal-content">
           <DialogContentText id="alert-dialog-description">
             {props.description}
           </DialogContentText>

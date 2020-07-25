@@ -68,6 +68,9 @@ class DeclineModal extends React.Component {
     const userId = this.state.userId;
     console.log("userid", userId);
 
+    const time = new Date().getTime();
+    const date = new Date(time);
+
     var historyRef = firebase
       .database()
       .ref("/user_kyc/" + userId + "/history")
@@ -76,10 +79,10 @@ class DeclineModal extends React.Component {
 
     var postHistory = {
       status: "Denied",
-      review_date: Date.now(),
+      review_date: date.getTime(),
       reviewer: this.state.adminInfo.email,
       remarks: this.state.feedback,
-      last_edit_date: Date.now(),
+      last_edit_date: date.getTime(),
     };
     historyRef.set(postHistory);
 
@@ -106,16 +109,18 @@ class DeclineModal extends React.Component {
 
         {/* Decline Modal */}
         <Dialog
+          className="modal-container"
           open={this.state.isOpen}
           onClose={this.handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">Deny</DialogTitle>
-          <DialogContent>
+          <DialogContent class="modal-content">
             <DialogContentText id="alert-dialog-description">
               <form noValidate autoComplete="off">
                 <TextField
+                  className="input-field"
                   id="reason-field"
                   label="Reason"
                   InputLabelProps={{

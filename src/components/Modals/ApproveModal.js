@@ -85,8 +85,10 @@ class ApproveModal extends React.Component {
           description="Are you sure you want to approve this KYC?"
           open={this.state.isOpen}
           close={this.handleClose}
+          className="modal-container"
         >
           <Button
+            className="btn btn-secondary"
             color="secondary"
             variant="outlined"
             onClick={this.handleClose}
@@ -110,6 +112,7 @@ class ApproveModal extends React.Component {
           description="KYC is Approved."
           open={this.state.successModal}
           close={this.handleClose}
+          className="modal-container"
         />
       </div>
     );

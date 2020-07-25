@@ -61,6 +61,9 @@ class EscalateModal extends React.Component {
   escalateKyc = () => {
     const userId = this.state.userId;
 
+    const time = new Date().getTime();
+    const date = new Date(time);
+
     var historyRef = firebase
       .database()
       .ref("/user_kyc/" + userId + "/history")
@@ -70,10 +73,10 @@ class EscalateModal extends React.Component {
 
     var postHistory = {
       status: "Escalated",
-      review_date: Date.now(),
+      review_date: date.getTime(),
       reviewer: this.state.adminInfo.email,
       remarks: this.state.feedback,
-      last_edit_date: Date.now(),
+      last_edit_date: date.getTime(),
     };
     historyRef.set(postHistory);
 
@@ -98,16 +101,18 @@ class EscalateModal extends React.Component {
 
         {/* Decline Modal */}
         <Dialog
+          className="modal-container"
           open={this.state.isOpen}
           onClose={this.handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">Escalate</DialogTitle>
-          <DialogContent>
+          <DialogContent className="modal-content">
             <DialogContentText id="alert-dialog-description">
               <form noValidate autoComplete="off">
                 <TextField
+                  className="input-field"
                   id="reason-field"
                   label="Reason"
                   fullWidth
@@ -120,6 +125,7 @@ class EscalateModal extends React.Component {
                 <TextField
                   autoFocus
                   margin="dense"
+                  className="input-field"
                   id="name"
                   label="Escalate to (email)"
                   type="email"
