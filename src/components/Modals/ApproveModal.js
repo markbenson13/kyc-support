@@ -14,6 +14,7 @@ class ApproveModal extends React.Component {
       close: false,
       adminInfo: [],
       userId: [],
+      userData: [],
     };
 
     this.approveKyc = this.approveKyc.bind(this);
@@ -21,8 +22,18 @@ class ApproveModal extends React.Component {
 
   componentDidMount() {
     const admin = firebase.auth().currentUser;
-    const userId = this.props.userId;
-    this.setState({ userId: userId });
+    // const userId = this.props.userData;
+
+    const userData = {
+      id: this.props.userData.id,
+      current_level: this.props.userData.currentLevel,
+      status: this.props.userData.currentStatus,
+    };
+
+    console.log("user data", userData);
+
+    // this.setState({ userId: userId });
+    this.setState({ userData: userData });
 
     admin.providerData.forEach((adminData) => {
       this.setState({ adminInfo: adminData });
@@ -41,8 +52,10 @@ class ApproveModal extends React.Component {
 
   // Approve KYC
   approveKyc = () => {
-    const userId = this.state.userId;
-    console.log("userId", userId);
+    const userId = this.state.userData.id;
+    const userLevel = this.state.userData.current_level;
+    const adminEmail = this.state.adminInfo.email;
+    console.log("userLevel", this.state.userData);
 
     const time = new Date().getTime();
     const date = new Date(time);
@@ -52,15 +65,54 @@ class ApproveModal extends React.Component {
       .ref("/user_kyc/" + userId + "/history")
       .push();
 
+    var statusRef = firebase.database().ref("/user_kyc/" + userId + "/status");
+
     var postHistory = {
       id: userId,
       status: "Approved",
       review_date: date.getTime(),
-      reviewer: this.state.adminInfo.email,
+      reviewer: adminEmail,
       remarks: "Approved",
       last_edit_date: date.getTime(),
+      level: userLevel,
     };
+
+    let current_level = "";
+    let current_status = "";
+    if (userLevel == 2) {
+      current_level = 3;
+      current_status = "completed";
+    } else {
+      current_level = 4;
+      current_status = "completed";
+    }
+
+    var updateStatus = {
+      current_level: current_level,
+      level_1: [
+        { label: "Phone Verification", level: "1_1", status: "completed" },
+        { label: "Email Verification", level: "1_2", status: "completed" },
+      ],
+      level_2: [
+        {
+          label: "Identity Verification",
+          level: "2_1",
+          status: current_status,
+        },
+        { label: "Selfie Verification", level: "2_2", status: current_status },
+      ],
+      level_3: [
+        { label: "Address Verification", level: "3", status: current_status },
+      ],
+      level_4: [
+        { label: "Proof of Income", level: "4", status: current_status },
+      ],
+    };
+
+    console.log("updated status", updateStatus);
+
     historyRef.set(postHistory);
+    statusRef.set(JSON.stringify(updateStatus));
 
     // Close current modal, and open success modal
     this.setState({ isOpen: false, successModal: true });

@@ -46,15 +46,10 @@ class Kyc extends React.Component {
       sanctions_list: [],
       status: [],
       user_wallet: [],
-      user_history: [],
     };
   }
 
   componentDidMount() {
-    // const users = [];
-    const usersObj = {};
-    const users_wallet = [];
-
     const userKyc = db.ref("user_kyc");
     const userWallet = db.ref("user_wallet");
 
@@ -79,31 +74,31 @@ class Kyc extends React.Component {
           return map;
         }, {});
 
-        Object.keys(userMap).map((users) => {
-          // console.log("users", users);
-        });
+        // Object.keys(userMap).map((users) => {
+        //   console.log("users", users);
+        // });
 
         console.log("usermap", userMap);
 
         const userList = Object.keys(userMap).map((userId) => {
           const {
-            kycData: { data: newData, name_scan, status: newStatus, history },
+            kycData: {
+              data: newData,
+              name_scan,
+              status: current_status,
+              level2_status,
+              level3_status,
+              level4_status,
+              history,
+            },
             walletData,
           } = userMap[userId];
-
-          // const history_list =
-          //   history &&
-          //   Object.keys(history).map((history_item) => {
-          //     return history[history_item];
-          //   });
-
-          // console.log("list", history_list);
 
           const data = newData.level_2 ? JSON.parse(newData.level_2) : {};
           const level3 = newData.level_3 ? JSON.parse(newData.level_3) : {};
           const level4 = newData.level_4 ? JSON.parse(newData.level_4) : {};
           const newscan = name_scan ? JSON.parse(name_scan) : {};
-          const status = newStatus ? JSON.parse(newStatus) : {};
+          const status = current_status ? JSON.parse(current_status) : {};
           const wallet = walletData.data ? JSON.parse(walletData.data) : {};
           const history_list = history;
           // const newEmployed = level4.employed
@@ -116,7 +111,7 @@ class Kyc extends React.Component {
           //   : {};
 
           // console.log("newscan", newscan.numberOfPepMatches);
-          // console.log("history-item", history_list);
+          // console.log("status", status);
 
           return {
             id: userId,
@@ -138,11 +133,26 @@ class Kyc extends React.Component {
             dateUpdated: wallet[0].updatedAt || "",
             customerType: wallet[0].typeOfUser || "",
             mobileNo: wallet[0].mobileNo || "",
-            level: status.current_level || "",
-            status: status.level_2[1].status || "",
+            currentStatus: status.level_2[1].status || "",
+            currentLevel: status.current_level || "",
             pepMatch: newscan.numberOfPepMatches === 0 ? "Negative" : "",
-            presentAddress: level3.present_address || {},
-            permanentAddress: level3.permanent_address || {},
+            // presentAddress: level3.present_address || {},
+            // permanentAddress: level3.permanent_address || {},
+            billingStatement: level3.billing_statement_photo_url || "",
+            permanentAddress1: level3.pm_address_1 || "",
+            permanentAddress2: level3.permanent_address || "",
+            permanentBrgy: level3.pm_barangay || "",
+            permanentCity: level3.pm_city || "",
+            permanentCountry: level3.pm_country || "",
+            permanentState: level3.pm_state_prov || "",
+            permanentZipCode: level3.pm_zip_code || "",
+            presentAddress1: level3.pr_address_1 || "",
+            presentAddress2: level3.pr_address || "",
+            presentBrgy: level3.pr_barangay || "",
+            presentCity: level3.pr_city || "",
+            presentCountry: level3.pr_country || "",
+            presentState: level3.pr_state_prov || "",
+            presentZipCode: level3.pr_zip_code || "",
             documentPhotoUrl: level4.document_photo_url || "",
             documentType: level4.document_type || "",
             occupation: (level4.employed && level4.employed.occupation) || "",
@@ -163,27 +173,6 @@ class Kyc extends React.Component {
 
         console.log("userlist", userList);
         this.setState({ users: userList });
-
-        this.state.users.length &&
-          this.state.users.map((user) => {
-            let latestDate = "";
-            let latestHistory = "";
-
-            Object.keys(user.history).map((history_item) => {
-              if (!latestDate) {
-                latestDate = user.history[history_item].last_edit_date;
-                latestHistory = user.history[history_item];
-              } else {
-                if (latestDate < user.history[history_item].last_edit_date) {
-                  latestDate = user.history[history_item].last_edit_date;
-                  latestHistory = user.history[history_item];
-                }
-              }
-              const userHistory = this.state.user_history;
-              userHistory[latestHistory.id] = latestHistory;
-              this.setState({ user_history: userHistory });
-            });
-          });
       }
     );
   }
@@ -226,7 +215,7 @@ class Kyc extends React.Component {
                     const keyIndex = historyKeys[targetHistoryKeysIndex];
                     const selectedObj = user.history[keyIndex] || "";
 
-                    if (user.status === "under review") {
+                    if (user.currentStatus === "under review") {
                       return (
                         <TableRow className="table-row">
                           <TableCell>
@@ -240,12 +229,15 @@ class Kyc extends React.Component {
                           <TableCell>
                             {formatDate(user.dateSubmitted)}
                           </TableCell>
-                          <TableCell>Level {user.level}</TableCell>
+                          <TableCell>Level {user.currentLevel}</TableCell>
                           <TableCell>{user.customerType}</TableCell>
-                          <TableCell>{user.pepMatch}</TableCell>
+                          <TableCell>{user.pepMatch || "No record"}</TableCell>
                           <TableCell>
-                            {selectedObj.last_edit_date &&
-                              formatDate(selectedObj.last_edit_date)}
+                            {(selectedObj &&
+                              selectedObj.reviewer +
+                                "" +
+                                formatDate(selectedObj.last_edit_date)) ||
+                              "Not yet reviewed"}
                           </TableCell>
 
                           <TableCell align="center">
@@ -302,18 +294,21 @@ class Kyc extends React.Component {
                         </TableCell>
                         <TableCell>{user.email}</TableCell>
                         <TableCell>
-                          {selectedObj &&
+                          {(selectedObj &&
                             selectedObj.reviewer +
                               " " +
-                              formatDate(selectedObj.last_edit_date)}
+                              formatDate(selectedObj.last_edit_date)) ||
+                            "Not yet reviewed"}
                         </TableCell>
 
-                        <TableCell>Level {user.level}</TableCell>
+                        <TableCell>Level {user.currentLevel}</TableCell>
                         <TableCell>
-                          {selectedObj && selectedObj.status}
+                          {(selectedObj && selectedObj.status) ||
+                            user.currentStatus}
                         </TableCell>
                         <TableCell>
-                          {selectedObj && selectedObj.remarks}
+                          {(selectedObj && selectedObj.remarks) ||
+                            "No feedback"}
                         </TableCell>
                         <TableCell align="center">
                           <Link

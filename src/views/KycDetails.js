@@ -36,18 +36,6 @@ const historyColumn = [
   { id: "lastEditBy", title: "Last edit by" },
 ];
 
-const historyData = [
-  {
-    level: "1",
-    submissionDate: "02/18/2020",
-    reviewDate: "02/18/20202",
-    status: "Under Review",
-    reviewer: "Winnie Balagso",
-    remarks: "Reason here",
-    lastEditBy: "02/18/2020",
-  },
-];
-
 class KycDetails extends React.Component {
   constructor(props) {
     super(props);
@@ -60,17 +48,18 @@ class KycDetails extends React.Component {
 
   componentWillMount = () => {
     const person = this.props.location.state.user;
+    console.log(person);
     const history = person.history;
     this.setState({ userDetails: person });
 
-    console.log("person", person);
+    // console.log("person", person);
     // if (!detail.permanentAddress && !detail.presentAddress) return false;
 
     const historyList = Object.keys(history, person).map((historyId) => {
       const historyData = history[historyId];
       const personInfo = person;
 
-      console.log("history-data", historyData);
+      // console.log("history-data", historyData);
       console.log("person-data", personInfo);
 
       return {
@@ -78,8 +67,8 @@ class KycDetails extends React.Component {
         remarks: historyData.remarks || "",
         review_date: historyData.review_date || "",
         reviewer: historyData.reviewer || "",
-        status: historyData.status || "",
-        level: personInfo.level || "",
+        status: historyData.status || personInfo.currentStatus,
+        level: historyData.level || personInfo.currentLevel,
         dateSubmitted: personInfo.dateSubmitted || "",
       };
     });
@@ -248,18 +237,20 @@ class KycDetails extends React.Component {
                   Current Address
                 </Typography>
                 <Typography variant="body2">
-                  {(userDetails.presentAddress.street_address &&
-                    userDetails.presentAddress.street_address +
+                  {(userDetails &&
+                    userDetails.presentAddress1 +
                       " " +
-                      userDetails.presentAddress.address_info +
+                      userDetails.presentAddress2 +
                       ", " +
-                      userDetails.presentAddress.barangay +
+                      userDetails.presentBrgy +
                       ", " +
-                      userDetails.presentAddress.city +
+                      userDetails.presenCity +
                       ", " +
-                      userDetails.presentAddress.state +
+                      userDetails.presentCountry +
                       " " +
-                      userDetails.presentAddress.zip_code) ||
+                      userDetails.presentState +
+                      " " +
+                      userDetails.presentZipCode) ||
                     ""}
                 </Typography>
               </Grid>
@@ -268,18 +259,20 @@ class KycDetails extends React.Component {
                   Permanent Address
                 </Typography>
                 <Typography variant="body2">
-                  {(userDetails.permanentAddress.street_address &&
-                    userDetails.permanentAddress.street_address +
+                  {(userDetails.length &&
+                    userDetails.permanentAddress1 +
                       " " +
-                      userDetails.permanentAddress.address_info +
+                      userDetails.permanentAddress2 +
                       ", " +
-                      userDetails.permanentAddress.barangay +
+                      userDetails.permanentBrgy +
                       ", " +
-                      userDetails.permanentAddress.city +
+                      userDetails.presenCity +
                       ", " +
-                      userDetails.permanentAddress.state +
+                      userDetails.permanentCountry +
                       " " +
-                      userDetails.permanentAddress.zip_code) ||
+                      userDetails.permanentState +
+                      " " +
+                      userDetails.permanentZipCode) ||
                     ""}
                 </Typography>
               </Grid>
@@ -289,11 +282,11 @@ class KycDetails extends React.Component {
                 </Typography>
                 <Typography variant="body2">
                   Type of Document:{" "}
-                  {userDetails.permanentAddress.billing_statement}
+                  {/* {userDetails.permanentAddress.billing_statement} */}
                 </Typography>
                 <img
                   className="image-photo"
-                  src={userDetails.permanentAddress.billing_statement_photo_url}
+                  src={userDetails.billingStatement}
                   alt="Billing statement"
                 />
               </Grid>
@@ -357,11 +350,11 @@ class KycDetails extends React.Component {
                   {/* {userDetails.occupationDetails.industry} */}
                 </Typography>
               </Grid>
-              <Grid item xs={3}>
+              {/* <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Findings from PEP Scan
                 </Typography>
-              </Grid>
+              </Grid> */}
             </Grid>
           </Paper>
 
@@ -412,9 +405,9 @@ class KycDetails extends React.Component {
             spacing={3}
           >
             <Grid item xs={3}>
-              <ApproveModal userId={userDetails.id} />
-              <DeclineModal userId={userDetails.id} />
-              <EscalateModal userId={userDetails.id} />
+              <ApproveModal userData={userDetails} />
+              <DeclineModal userData={userDetails} />
+              <EscalateModal userData={userDetails} />
             </Grid>
           </Grid>
         </div>
