@@ -134,7 +134,13 @@ class Amla extends React.Component {
     const { users } = this.state;
 
     function formatDate(string) {
-      var options = { month: "numeric", day: "numeric", year: "numeric" };
+      var options = {
+        month: "numeric",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      };
       return new Date(string).toLocaleDateString([], options);
     }
 

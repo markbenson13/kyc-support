@@ -81,7 +81,13 @@ class KycDetails extends React.Component {
     // console.log("userDetails", userDetails);
     console.log("hist state", history);
     function formatDate(string) {
-      var options = { month: "numeric", day: "numeric", year: "numeric" };
+      var options = {
+        month: "numeric",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      };
       return new Date(string).toLocaleDateString([], options);
     }
 

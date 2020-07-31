@@ -185,7 +185,13 @@ class Customers extends React.Component {
   }
   render() {
     function formatDate(string) {
-      var options = { month: "numeric", day: "numeric", year: "numeric" };
+      var options = {
+        month: "numeric",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      };
       return new Date(string).toLocaleDateString([], options);
     }
 

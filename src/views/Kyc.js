@@ -132,7 +132,8 @@ class Kyc extends React.Component {
             mobileNo: wallet[0].mobileNo || "",
             currentStatus: status.level_2[1].status || "",
             currentLevel: status.current_level || "",
-            pepMatch: newscan.numberOfPepMatches === 0 ? "Negative" : "",
+            pepMatch: newscan.numberOfPepMatches || "",
+            sanctionMatch: newscan.numberOfSipMatches || "",
             presentAddress: level3.present_address || {},
             permanentAddress: level3.permanent_address || {},
             employmentType: level4.employment_type || "",
@@ -154,7 +155,13 @@ class Kyc extends React.Component {
 
   render() {
     function formatDate(string) {
-      var options = { month: "numeric", day: "numeric", year: "numeric" };
+      var options = {
+        month: "numeric",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      };
       return new Date(string).toLocaleDateString([], options);
     }
 
@@ -190,7 +197,7 @@ class Kyc extends React.Component {
                     const keyIndex = historyKeys[targetHistoryKeysIndex];
                     const selectedObj = user.history[keyIndex] || "";
 
-                    if (user.currentStatus === "under review") {
+                    if (user.currentStatus === "unverified") {
                       return (
                         <TableRow className="table-row">
                           <TableCell className="user-fullname">
@@ -213,7 +220,8 @@ class Kyc extends React.Component {
                             {user.customerType}
                           </TableCell>
                           <TableCell className="user-pepmatch">
-                            {user.pepMatch || "No record"}
+                            <div>PEP Match: {user.pepMatch || 0}</div>
+                            <div>Sanction Match: {user.sanctionMatch || 0}</div>
                           </TableCell>
                           <TableCell className="reviewer">
                             {(selectedObj &&
