@@ -21,7 +21,7 @@ const pendingColumn = [
   { id: "dateSubmitted", title: "Date Submitted" },
   { id: "level", title: "Level" },
   { id: "customerType", title: "Customer Type" },
-  { id: "pepScan", title: "PEP Scan Identified" },
+  { id: "pepScan", title: "Findings" },
   { id: "openedBy", title: "Last opened by" },
   { id: "action", title: "Action" },
 ];
@@ -86,9 +86,6 @@ class Kyc extends React.Component {
               data: newData,
               name_scan,
               status: current_status,
-              level2_status,
-              level3_status,
-              level4_status,
               history,
             },
             walletData,
@@ -101,17 +98,17 @@ class Kyc extends React.Component {
           const status = current_status ? JSON.parse(current_status) : {};
           const wallet = walletData.data ? JSON.parse(walletData.data) : {};
           const history_list = history;
-          // const newEmployed = level4.employed
-          //   ? (level4.employed === typeof Object && level4.employed) || {}
-          //   : {};
-          // const newSelfEmployed = level4.self_employed
-          //   ? (level4.self_employed === typeof Object &&
-          //       level4.self_employed) ||
-          //     {}
-          //   : {};
+          const newEmployed = level4.employed
+            ? (level4.employed === typeof Object && level4.employed) || {}
+            : {};
+          const newSelfEmployed = level4.self_employed
+            ? (level4.self_employed === typeof Object &&
+                level4.self_employed) ||
+              {}
+            : {};
 
           // console.log("newscan", newscan.numberOfPepMatches);
-          // console.log("status", status);
+          console.log("employed", newEmployed);
 
           return {
             id: userId,
@@ -136,37 +133,15 @@ class Kyc extends React.Component {
             currentStatus: status.level_2[1].status || "",
             currentLevel: status.current_level || "",
             pepMatch: newscan.numberOfPepMatches === 0 ? "Negative" : "",
-            // presentAddress: level3.present_address || {},
-            // permanentAddress: level3.permanent_address || {},
-            billingStatement: level3.billing_statement_photo_url || "",
-            permanentAddress1: level3.pm_address_1 || "",
-            permanentAddress2: level3.permanent_address || "",
-            permanentBrgy: level3.pm_barangay || "",
-            permanentCity: level3.pm_city || "",
-            permanentCountry: level3.pm_country || "",
-            permanentState: level3.pm_state_prov || "",
-            permanentZipCode: level3.pm_zip_code || "",
-            presentAddress1: level3.pr_address_1 || "",
-            presentAddress2: level3.pr_address || "",
-            presentBrgy: level3.pr_barangay || "",
-            presentCity: level3.pr_city || "",
-            presentCountry: level3.pr_country || "",
-            presentState: level3.pr_state_prov || "",
-            presentZipCode: level3.pr_zip_code || "",
-            documentPhotoUrl: level4.document_photo_url || "",
-            documentType: level4.document_type || "",
-            occupation: (level4.employed && level4.employed.occupation) || "",
-            position: (level4.employed && level4.employed.position) || "",
-            industry: (level4.employed && level4.employed.industry) || "",
-            company: (level4.employed && level4.employed.company) || "",
-            // occupationDetails:
-            //   (!!Object.keys(newEmployed).length && newEmployed) ||
-            //   (!!Object.keys(newSelfEmployed).length && newSelfEmployed) ||
-            //   {},
-            // employmentCategory:
-            //   (!!Object.keys(newEmployed).length && "Employed") ||
-            //   (!!Object.keys(newSelfEmployed).length && "Self Employed") ||
-            //   "",
+            presentAddress: level3.present_address || {},
+            permanentAddress: level3.permanent_address || {},
+            employmentType: level4.employment_type || "",
+            documentPhotoUrl: level4.document_url || "",
+            documentType: level4.type_of_document || "",
+            occupation: level4.occupation || "",
+            position: level4.position || "",
+            industry: level4.industry || "",
+            company: level4.company_name || "",
             history: (history_list && history_list) || {},
           };
         });
@@ -218,21 +193,29 @@ class Kyc extends React.Component {
                     if (user.currentStatus === "under review") {
                       return (
                         <TableRow className="table-row">
-                          <TableCell>
+                          <TableCell className="user-fullname">
                             {user.first_name +
                               " " +
                               user.middle_name +
                               " " +
                               user.last_name}
                           </TableCell>
-                          <TableCell>{user.email}</TableCell>
-                          <TableCell>
+                          <TableCell className="user-email">
+                            {user.email}
+                          </TableCell>
+                          <TableCell className="date-submitted">
                             {formatDate(user.dateSubmitted)}
                           </TableCell>
-                          <TableCell>Level {user.currentLevel}</TableCell>
-                          <TableCell>{user.customerType}</TableCell>
-                          <TableCell>{user.pepMatch || "No record"}</TableCell>
-                          <TableCell>
+                          <TableCell className="user-level">
+                            Level {user.currentLevel}
+                          </TableCell>
+                          <TableCell className="user-type">
+                            {user.customerType}
+                          </TableCell>
+                          <TableCell className="user-pepmatch">
+                            {user.pepMatch || "No record"}
+                          </TableCell>
+                          <TableCell className="reviewer">
                             {(selectedObj &&
                               selectedObj.reviewer +
                                 "" +
@@ -240,7 +223,7 @@ class Kyc extends React.Component {
                               "Not yet reviewed"}
                           </TableCell>
 
-                          <TableCell align="center">
+                          <TableCell className="user-action" align="center">
                             <Link
                               to={{
                                 pathname: `/user/${user.id}`,
@@ -285,15 +268,17 @@ class Kyc extends React.Component {
 
                     return (
                       <TableRow key={user.id} className="table-row">
-                        <TableCell>
+                        <TableCell className="user-fullname">
                           {user.first_name +
                             " " +
                             user.middle_name +
                             " " +
                             user.last_name}
                         </TableCell>
-                        <TableCell>{user.email}</TableCell>
-                        <TableCell>
+                        <TableCell className="user-email">
+                          {user.email}
+                        </TableCell>
+                        <TableCell className="reviewer">
                           {(selectedObj &&
                             selectedObj.reviewer +
                               " " +
@@ -301,16 +286,18 @@ class Kyc extends React.Component {
                             "Not yet reviewed"}
                         </TableCell>
 
-                        <TableCell>Level {user.currentLevel}</TableCell>
-                        <TableCell>
+                        <TableCell className="user-level">
+                          Level {user.currentLevel}
+                        </TableCell>
+                        <TableCell className="user-status">
                           {(selectedObj && selectedObj.status) ||
                             user.currentStatus}
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="feedback">
                           {(selectedObj && selectedObj.remarks) ||
                             "No feedback"}
                         </TableCell>
-                        <TableCell align="center">
+                        <TableCell className="user-action" align="center">
                           <Link
                             to={{
                               pathname: `/user/${user.id}`,

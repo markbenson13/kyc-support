@@ -89,6 +89,10 @@
           color: #49C0F9;
           text-decoration: none;
         }
+
+        &.user-type {
+          text-transform: capitalize;
+        }
       }
     }
 

@@ -138,18 +138,12 @@ class Amla extends React.Component {
       return new Date(string).toLocaleDateString([], options);
     }
 
-    function counter() {
-      for (let i = 1; i > 1; i++) {
-        return i;
-      }
-    }
-
     return (
       <div>
         <Sidebar />
         <Header />
         <div className="content-wrapper">
-          <h2>Amla</h2>
+          <h2>AMLA</h2>
           <TableContainer
             component={Paper}
             id="table-wrapper"
@@ -181,12 +175,13 @@ class Amla extends React.Component {
                       user.middle_name +
                       " " +
                       user.last_name;
+                    let counter = 1;
 
                     if (user.pepMatch > 0) {
                       return (
-                        <TableRow key={key}>
+                        <TableRow key={key} className="table-row">
                           <TableCell component="th" scope="row">
-                            {counter()}
+                            {counter++}
                           </TableCell>
                           <TableCell align="left">{full_name}</TableCell>
                           <TableCell align="left">

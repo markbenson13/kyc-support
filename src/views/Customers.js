@@ -104,54 +104,24 @@ class Customers extends React.Component {
 
         const userList = Object.keys(userMap).map((userId) => {
           const {
-            kycData: { data: newData, name_scan, status: newStatus, history },
+            kycData: {
+              data: newData,
+              name_scan,
+              status: current_status,
+              history,
+            },
             walletData,
           } = userMap[userId];
 
           console.log("usermap id", userMap[userId]);
 
-          // history.map((history_list) => {
-          //   console.log(history_list);
-          // });
-
           const data = newData.level_2 ? JSON.parse(newData.level_2) : {};
           const level3 = newData.level_3 ? JSON.parse(newData.level_3) : {};
           const level4 = newData.level_4 ? JSON.parse(newData.level_4) : {};
           const newscan = name_scan ? JSON.parse(name_scan) : {};
-          const status = newStatus ? JSON.parse(newStatus) : {};
+          const status = current_status ? JSON.parse(current_status) : {};
           const wallet = walletData.data ? JSON.parse(walletData.data) : {};
           const history_list = history;
-          // const {
-          //   kycData: { data, name_scan, status },
-          //   walletData: wallet,
-          // } = userMap[userId];
-          // const level2 = data.level_2 ? JSON.parse(kycData.data.level_2) : {};
-          // const level3 = data.level_3 ? JSON.parse(kycData.data.level_3) : {};
-          // const level4 = data.level_4 ? JSON.parse(kycData.data.level_4) : {};
-          // const namescan = JSON.parse(kycData.name_scan);
-          // const status = JSON.parse(kycData.status);
-          // const wallet = JSON.parse(walletData.data);
-
-          // console.log("kycData", Object.values(kycData));
-          // console.log("kycWallet", JSON.parse(walletData.data));
-          // console.log("level 4", level4.employed);
-          // console.log("status", newStatus);
-
-          const newEmployed = level4.employed
-            ? (level4.employed === typeof Object && level4.employed) || {}
-            : {};
-          const newSelfEmployed = level4.self_employed
-            ? (level4.self_employed === typeof Object &&
-                level4.self_employed) ||
-              {}
-            : {};
-
-          // console.log("pepMatch", newscan.numberOfPepMatches);
-
-          // const pepMatch = newscan.numberOfPepMatches;
-          // if (pepMatch == 0) {
-          //   const pepScan = "Negative";
-          // }
 
           return {
             id: userId,
@@ -178,16 +148,12 @@ class Customers extends React.Component {
             pepMatch: newscan.numberOfPepMatches,
             presentAddress: level3.present_address || {},
             permanentAddress: level3.permanent_address || {},
-            documentPhotoUrl: level4.document_photo_url || "",
-            documentType: level4.document_type || "",
-            occupationDetails:
-              (!!Object.keys(newEmployed).length && newEmployed) ||
-              (!!Object.keys(newSelfEmployed).length && newSelfEmployed) ||
-              {},
-            employmentCategory:
-              (!!Object.keys(newEmployed).length && "Employed") ||
-              (!!Object.keys(newSelfEmployed).length && "Self Employed") ||
-              "",
+            documentPhotoUrl: level4.document_url || "",
+            documentType: level4.type_of_document || "",
+            occupation: level4.occupation || "",
+            position: level4.position || "",
+            industry: level4.industry || "",
+            company: level4.company_name || "",
             history: (history_list && history_list) || {},
           };
         });

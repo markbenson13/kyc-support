@@ -72,19 +72,24 @@ class ApproveModal extends React.Component {
       status: "Approved",
       review_date: date.getTime(),
       reviewer: adminEmail,
-      remarks: "Approved",
+      remarks: "Completed documents",
       last_edit_date: date.getTime(),
       level: userLevel,
     };
 
     let current_level = "";
-    let current_status = "";
+    let level2_status = "unverified";
+    let level3_status = "unverified";
+    let level4_status = "unverified";
     if (userLevel == 2) {
       current_level = 3;
-      current_status = "completed";
+      level2_status = "completed";
+    } else if (userLevel == 3) {
+      current_level = 4;
+      level3_status = "completed";
     } else {
       current_level = 4;
-      current_status = "completed";
+      level4_status = "completed";
     }
 
     var updateStatus = {
@@ -97,15 +102,27 @@ class ApproveModal extends React.Component {
         {
           label: "Identity Verification",
           level: "2_1",
-          status: current_status,
+          status: level2_status,
         },
-        { label: "Selfie Verification", level: "2_2", status: current_status },
+        {
+          label: "Selfie Verification",
+          level: "2_2",
+          status: level2_status,
+        },
       ],
       level_3: [
-        { label: "Address Verification", level: "3", status: current_status },
+        {
+          label: "Address Verification",
+          level: "3",
+          status: level3_status,
+        },
       ],
       level_4: [
-        { label: "Proof of Income", level: "4", status: current_status },
+        {
+          label: "Proof of Income",
+          level: "4",
+          status: level4_status,
+        },
       ],
     };
 

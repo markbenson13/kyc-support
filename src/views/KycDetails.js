@@ -85,6 +85,35 @@ class KycDetails extends React.Component {
       return new Date(string).toLocaleDateString([], options);
     }
 
+    let gender = "";
+    if (userDetails.gender === "m") {
+      gender = "Male";
+    } else {
+      gender = "Female";
+    }
+
+    const present_address =
+      [
+        userDetails.presentAddress.address_1,
+        userDetails.presentAddress.address_2,
+        userDetails.presentAddress.barangay,
+        userDetails.presentAddress.city,
+        userDetails.presentAddress.country,
+        userDetails.presentAddress.state,
+        userDetails.presentAddress.zip_code,
+      ].join(" ") || " ";
+
+    const permanent_address =
+      [
+        userDetails.permanentAddress.address_1,
+        userDetails.permanentAddress.address_2,
+        userDetails.permanentAddress.barangay,
+        userDetails.permanentAddress.city,
+        userDetails.permanentAddress.country,
+        userDetails.permanentAddress.state,
+        userDetails.permanentAddress.zip_code,
+      ].join(" ") || " ";
+
     return (
       <>
         <Sidebar />
@@ -138,7 +167,7 @@ class KycDetails extends React.Component {
                 <Typography variant="body1" className="detail-label">
                   Gender
                 </Typography>
-                <Typography variant="body2">{userDetails.gender}</Typography>
+                <Typography variant="body2">{gender}</Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
@@ -236,45 +265,13 @@ class KycDetails extends React.Component {
                 <Typography variant="body1" className="detail-label">
                   Current Address
                 </Typography>
-                <Typography variant="body2">
-                  {(userDetails &&
-                    userDetails.presentAddress1 +
-                      " " +
-                      userDetails.presentAddress2 +
-                      ", " +
-                      userDetails.presentBrgy +
-                      ", " +
-                      userDetails.presenCity +
-                      ", " +
-                      userDetails.presentCountry +
-                      " " +
-                      userDetails.presentState +
-                      " " +
-                      userDetails.presentZipCode) ||
-                    ""}
-                </Typography>
+                <Typography variant="body2">{present_address}</Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="body1" className="detail-label">
                   Permanent Address
                 </Typography>
-                <Typography variant="body2">
-                  {(userDetails.length &&
-                    userDetails.permanentAddress1 +
-                      " " +
-                      userDetails.permanentAddress2 +
-                      ", " +
-                      userDetails.permanentBrgy +
-                      ", " +
-                      userDetails.presenCity +
-                      ", " +
-                      userDetails.permanentCountry +
-                      " " +
-                      userDetails.permanentState +
-                      " " +
-                      userDetails.permanentZipCode) ||
-                    ""}
-                </Typography>
+                <Typography variant="body2">{permanent_address}</Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="body1" className="detail-label">
@@ -282,11 +279,11 @@ class KycDetails extends React.Component {
                 </Typography>
                 <Typography variant="body2">
                   Type of Document:{" "}
-                  {/* {userDetails.permanentAddress.billing_statement} */}
+                  {userDetails.permanentAddress.billing_statement}
                 </Typography>
                 <img
                   className="image-photo"
-                  src={userDetails.billingStatement}
+                  src={userDetails.permanentAddress.billing_statement_photo_url}
                   alt="Billing statement"
                 />
               </Grid>
@@ -306,8 +303,8 @@ class KycDetails extends React.Component {
                 <Typography variant="body1" className="detail-label">
                   Employment Category
                 </Typography>
-                <Typography variant="body2">
-                  {userDetails.employmentCategory}
+                <Typography variant="body2" className="is-capitalized">
+                  {userDetails.employmentType}
                 </Typography>
               </Grid>
               <Grid item xs={3}>
@@ -315,16 +312,14 @@ class KycDetails extends React.Component {
                   Occupation
                 </Typography>
                 <Typography variant="body2">
-                  {/* {userDetails.occupationDetails.occupation} */}
+                  {userDetails.occupation}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="body1" className="detail-label">
                   Position
                 </Typography>
-                <Typography variant="body2">
-                  {/* {userDetails.occupationDetails.position} */}
-                </Typography>
+                <Typography variant="body2">{userDetails.position}</Typography>
                 <Typography variant="body1" className="detail-label">
                   Proof of Income
                 </Typography>
@@ -338,17 +333,13 @@ class KycDetails extends React.Component {
                 <Typography variant="body1" className="detail-label">
                   Company Name/Business Name
                 </Typography>
-                <Typography variant="body2">
-                  {/* {userDetails.occupationDetails.company} */}
-                </Typography>
+                <Typography variant="body2">{userDetails.company}</Typography>
               </Grid>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
                   Industry
                 </Typography>
-                <Typography variant="body2">
-                  {/* {userDetails.occupationDetails.industry} */}
-                </Typography>
+                <Typography variant="body2">{userDetails.industry}</Typography>
               </Grid>
               {/* <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
