@@ -16,15 +16,7 @@ import ApproveModal from "../components/Modals/ApproveModal";
 import DeclineModal from "../components/Modals/DeclineModal";
 import EscalateModal from "../components/Modals/EscalateModal";
 import SuccessModal from "../components/Modals/SuccessModal";
-import {
-  Link,
-  Grid,
-  CircularProgress,
-  Button,
-  TextField,
-} from "@material-ui/core";
-import { db } from "../config/FirebaseConfig";
-import firebase from "firebase";
+import { Grid } from "@material-ui/core";
 
 const historyColumn = [
   { id: "name", title: "Level" },
@@ -41,28 +33,21 @@ class KycDetails extends React.Component {
     super(props);
 
     this.state = {
-      userDetails: [],
-      history: [],
+      userDetails: this.props.location.state.user,
+      history: this.props.location.state.user.history,
     };
   }
 
   componentWillMount = () => {
-    const person = this.props.location.state.user;
-    console.log(person);
+    const person = this.state.userDetails;
+    console.log("person", person);
     const history = person.history;
-    this.setState({ userDetails: person });
-
-    // console.log("person", person);
-    // if (!detail.permanentAddress && !detail.presentAddress) return false;
 
     const historyList = Object.keys(history, person).map((historyId) => {
       const historyData = history[historyId];
       const personInfo = person;
-
-      // console.log("history-data", historyData);
-      console.log("person-data", personInfo);
-
       return {
+        id: historyData.id || "",
         last_edit_date: historyData.last_edit_date || "",
         remarks: historyData.remarks || "",
         review_date: historyData.review_date || "",
@@ -72,15 +57,22 @@ class KycDetails extends React.Component {
         dateSubmitted: personInfo.dateSubmitted || "",
       };
     });
-
     this.setState({ history: historyList });
   };
 
   render() {
     const { userDetails, history } = this.state;
-    // console.log("userDetails", userDetails);
-    console.log("hist state", history);
+
     function formatDate(string) {
+      var options = {
+        month: "numeric",
+        day: "numeric",
+        year: "numeric",
+      };
+      return new Date(string).toLocaleDateString([], options);
+    }
+
+    function formatDateTime(string) {
       var options = {
         month: "numeric",
         day: "numeric",
@@ -98,27 +90,27 @@ class KycDetails extends React.Component {
       gender = "Female";
     }
 
-    const present_address =
-      [
-        userDetails.presentAddress.address_1,
-        userDetails.presentAddress.address_2,
-        userDetails.presentAddress.barangay,
-        userDetails.presentAddress.city,
-        userDetails.presentAddress.country,
-        userDetails.presentAddress.state,
-        userDetails.presentAddress.zip_code,
-      ].join(" ") || " ";
+    // const present_address =
+    //   [
+    //     userDetails.presentAddress.address_1,
+    //     userDetails.presentAddress.address_2,
+    //     userDetails.presentAddress.barangay,
+    //     userDetails.presentAddress.city,
+    //     userDetails.presentAddress.country,
+    //     userDetails.presentAddress.state,
+    //     userDetails.presentAddress.zip_code,
+    //   ].join(" ") || " ";
 
-    const permanent_address =
-      [
-        userDetails.permanentAddress.address_1,
-        userDetails.permanentAddress.address_2,
-        userDetails.permanentAddress.barangay,
-        userDetails.permanentAddress.city,
-        userDetails.permanentAddress.country,
-        userDetails.permanentAddress.state,
-        userDetails.permanentAddress.zip_code,
-      ].join(" ") || " ";
+    // const permanent_address =
+    //   [
+    //     userDetails.permanentAddress.address_1,
+    //     userDetails.permanentAddress.address_2,
+    //     userDetails.permanentAddress.barangay,
+    //     userDetails.permanentAddress.city,
+    //     userDetails.permanentAddress.country,
+    //     userDetails.permanentAddress.state,
+    //     userDetails.permanentAddress.zip_code,
+    //   ].join(" ") || " ";
 
     return (
       <>
@@ -126,7 +118,7 @@ class KycDetails extends React.Component {
         <Header />
         <div className="content-wrapper">
           <h2>KYC Detail</h2>
-          <Paper elevation="3" className="details-container">
+          <Paper elevation={3} className="details-container">
             <Grid container spacing={2} m={2}>
               <Grid item xs={3}>
                 <Typography variant="body1" className="detail-label">
@@ -202,7 +194,7 @@ class KycDetails extends React.Component {
             </Grid>
           </Paper>
 
-          <Paper elevation="3" className="details-container">
+          <Paper elevation={3} className="details-container">
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Typography variant="h2" className="detail-heading">
@@ -258,7 +250,7 @@ class KycDetails extends React.Component {
             </Grid>
           </Paper>
 
-          <Paper elevation="3" className="details-container">
+          <Paper elevation={3} className="details-container">
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Typography variant="h2" className="detail-heading">
@@ -271,13 +263,13 @@ class KycDetails extends React.Component {
                 <Typography variant="body1" className="detail-label">
                   Current Address
                 </Typography>
-                <Typography variant="body2">{present_address}</Typography>
+                {/* <Typography variant="body2">{present_address}</Typography> */}
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="body1" className="detail-label">
                   Permanent Address
                 </Typography>
-                <Typography variant="body2">{permanent_address}</Typography>
+                {/* <Typography variant="body2">{permanent_address}</Typography> */}
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="body1" className="detail-label">
@@ -285,18 +277,18 @@ class KycDetails extends React.Component {
                 </Typography>
                 <Typography variant="body2">
                   Type of Document:{" "}
-                  {userDetails.permanentAddress.billing_statement}
+                  {/* {userDetails.permanentAddress.billing_statement} */}
                 </Typography>
-                <img
+                {/* <img
                   className="image-photo"
                   src={userDetails.permanentAddress.billing_statement_photo_url}
                   alt="Billing statement"
-                />
+                /> */}
               </Grid>
             </Grid>
           </Paper>
 
-          <Paper elevation="3" className="details-container">
+          <Paper elevation={3} className="details-container">
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Typography variant="h2" className="detail-heading">
@@ -374,18 +366,20 @@ class KycDetails extends React.Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {history.map((historyList) => (
-                  <TableRow className="table-row">
-                    <TableCell>{historyList.level}</TableCell>
+                {Object.keys(history).map((historyList) => (
+                  <TableRow key={history[historyList].id} className="table-row">
+                    <TableCell>{history[historyList].level}</TableCell>
                     <TableCell>
-                      {formatDate(historyList.dateSubmitted)}
+                      {formatDateTime(history[historyList].dateSubmitted)}
                     </TableCell>
-                    <TableCell>{formatDate(historyList.review_date)}</TableCell>
-                    <TableCell>{historyList.status}</TableCell>
-                    <TableCell>{historyList.reviewer}</TableCell>
-                    <TableCell>{historyList.remarks}</TableCell>
                     <TableCell>
-                      {formatDate(historyList.last_edit_date)}
+                      {formatDateTime(history[historyList].review_date)}
+                    </TableCell>
+                    <TableCell>{history[historyList].status}</TableCell>
+                    <TableCell>{history[historyList].reviewer}</TableCell>
+                    <TableCell>{history[historyList].remarks}</TableCell>
+                    <TableCell>
+                      {formatDateTime(history[historyList].last_edit_date)}
                     </TableCell>
                   </TableRow>
                 ))}

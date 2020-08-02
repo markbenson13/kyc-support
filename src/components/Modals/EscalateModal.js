@@ -21,7 +21,7 @@ class EscalateModal extends React.Component {
       email: "",
       confirmationModal: false,
       successModal: false,
-      userId: [],
+      userData: [],
     };
     this.handleFeedbackChange = this.handleFeedbackChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -30,9 +30,13 @@ class EscalateModal extends React.Component {
 
   componentDidMount() {
     const admin = firebase.auth().currentUser;
-    const userId = this.props.userId;
+    const userData = {
+      id: this.props.userData.id,
+      current_level: this.props.userData.currentLevel,
+      status: this.props.userData.currentStatus,
+    };
 
-    this.setState({ userId: userId });
+    this.setState({ userData: userData });
 
     admin.providerData.forEach((adminData) => {
       this.setState({ adminInfo: adminData });
@@ -59,7 +63,9 @@ class EscalateModal extends React.Component {
   }
 
   escalateKyc = () => {
-    const userId = this.state.userId;
+    const userId = this.state.userData.id;
+    const userLevel = this.state.userData.current_level;
+    const adminEmail = this.state.adminInfo.email;
 
     const time = new Date().getTime();
     const date = new Date(time);
@@ -72,11 +78,13 @@ class EscalateModal extends React.Component {
     // var key = historyRef.key;
 
     var postHistory = {
+      id: userId,
       status: "Escalated",
       review_date: date.getTime(),
-      reviewer: this.state.adminInfo.email,
-      remarks: this.state.feedback,
+      reviewer: adminEmail,
+      remarks: "Escalated",
       last_edit_date: date.getTime(),
+      level: userLevel,
     };
     historyRef.set(postHistory);
 

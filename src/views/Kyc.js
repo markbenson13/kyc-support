@@ -159,6 +159,15 @@ class Kyc extends React.Component {
         month: "numeric",
         day: "numeric",
         year: "numeric",
+      };
+      return new Date(string).toLocaleDateString([], options);
+    }
+
+    function formatDateTime(string) {
+      var options = {
+        month: "numeric",
+        day: "numeric",
+        year: "numeric",
         hour: "numeric",
         minute: "numeric",
       };
@@ -197,7 +206,7 @@ class Kyc extends React.Component {
                     const keyIndex = historyKeys[targetHistoryKeysIndex];
                     const selectedObj = user.history[keyIndex] || "";
 
-                    if (user.currentStatus === "unverified") {
+                    if (user.currentStatus === "under review") {
                       return (
                         <TableRow className="table-row">
                           <TableCell className="user-fullname">
@@ -211,7 +220,7 @@ class Kyc extends React.Component {
                             {user.email}
                           </TableCell>
                           <TableCell className="date-submitted">
-                            {formatDate(user.dateSubmitted)}
+                            {formatDateTime(user.dateSubmitted)}
                           </TableCell>
                           <TableCell className="user-level">
                             Level {user.currentLevel}
@@ -227,7 +236,7 @@ class Kyc extends React.Component {
                             {(selectedObj &&
                               selectedObj.reviewer +
                                 "" +
-                                formatDate(selectedObj.last_edit_date)) ||
+                                formatDateTime(selectedObj.last_edit_date)) ||
                               "Not yet reviewed"}
                           </TableCell>
 
@@ -290,7 +299,7 @@ class Kyc extends React.Component {
                           {(selectedObj &&
                             selectedObj.reviewer +
                               " " +
-                              formatDate(selectedObj.last_edit_date)) ||
+                              formatDateTime(selectedObj.last_edit_date)) ||
                             "Not yet reviewed"}
                         </TableCell>
 

@@ -21,7 +21,7 @@ class DeclineModal extends React.Component {
       feedback: "",
       confirmationModal: false,
       successModal: false,
-      userId: [],
+      userData: [],
     };
     this.handleChange = this.handleChange.bind(this);
     this.denyKyc = this.denyKyc.bind(this);
@@ -29,9 +29,13 @@ class DeclineModal extends React.Component {
 
   componentDidMount() {
     const admin = firebase.auth().currentUser;
-    const userId = this.props.userId;
+    const userData = {
+      id: this.props.userData.id,
+      current_level: this.props.userData.currentLevel,
+      status: this.props.userData.currentStatus,
+    };
 
-    this.setState({ userId: userId });
+    this.setState({ userData: userData });
 
     // Get admin user info
     admin.providerData.forEach((adminData) => {
@@ -65,8 +69,9 @@ class DeclineModal extends React.Component {
 
   // Deny KYC
   denyKyc = () => {
-    const userId = this.state.userId;
-    console.log("userid", userId);
+    const userId = this.state.userData.id;
+    const userLevel = this.state.userData.current_level;
+    const adminEmail = this.state.adminInfo.email;
 
     const time = new Date().getTime();
     const date = new Date(time);
@@ -78,11 +83,13 @@ class DeclineModal extends React.Component {
     // var key = historyRef.key;
 
     var postHistory = {
+      id: userId,
       status: "Denied",
       review_date: date.getTime(),
-      reviewer: this.state.adminInfo.email,
-      remarks: this.state.feedback,
+      reviewer: adminEmail,
+      remarks: "Denied",
       last_edit_date: date.getTime(),
+      level: userLevel,
     };
     historyRef.set(postHistory);
 
@@ -116,7 +123,7 @@ class DeclineModal extends React.Component {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">Deny</DialogTitle>
-          <DialogContent class="modal-content">
+          <DialogContent className="modal-content">
             <DialogContentText id="alert-dialog-description">
               <form noValidate autoComplete="off">
                 <TextField
@@ -152,6 +159,7 @@ class DeclineModal extends React.Component {
           close={this.handleClose}
         >
           <Button
+            className="btn btn-secondary"
             color="secondary"
             variant="outlined"
             onClick={this.handleClose}

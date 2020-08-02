@@ -81,10 +81,10 @@ class ApproveModal extends React.Component {
     let level2_status = "unverified";
     let level3_status = "unverified";
     let level4_status = "unverified";
-    if (userLevel == 2) {
+    if (userLevel === 2) {
       current_level = 3;
       level2_status = "completed";
-    } else if (userLevel == 3) {
+    } else if (userLevel === 3) {
       current_level = 4;
       level3_status = "completed";
     } else {

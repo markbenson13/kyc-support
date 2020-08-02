@@ -110,6 +110,7 @@ class Amla extends React.Component {
             level: status.current_level || "",
             status: status.level_2[1].status || "",
             pepMatch: newscan.numberOfPepMatches,
+            sanctionMatch: newscan.numberOfSipMatches || "",
             presentAddress: level3.present_address || {},
             permanentAddress: level3.permanent_address || {},
             documentPhotoUrl: level4.document_photo_url || "",
