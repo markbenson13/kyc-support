@@ -60,6 +60,10 @@ class KycDetails extends React.PureComponent {
     this.setState({ history: historyList });
   };
 
+  shouldComponentUpdate() {
+    return true;
+  }
+
   render() {
     const { userDetails, history } = this.state;
 
@@ -90,27 +94,27 @@ class KycDetails extends React.PureComponent {
       gender = "Female";
     }
 
-    // const present_address =
-    //   [
-    //     userDetails.presentAddress.address_1,
-    //     userDetails.presentAddress.address_2,
-    //     userDetails.presentAddress.barangay,
-    //     userDetails.presentAddress.city,
-    //     userDetails.presentAddress.country,
-    //     userDetails.presentAddress.state,
-    //     userDetails.presentAddress.zip_code,
-    //   ].join(" ") || " ";
+    const present_address =
+      [
+        userDetails.presentAddress.address_1,
+        userDetails.presentAddress.address_2,
+        userDetails.presentAddress.barangay,
+        userDetails.presentAddress.city,
+        userDetails.presentAddress.country,
+        userDetails.presentAddress.state,
+        userDetails.presentAddress.zip_code,
+      ].join(" ") || " ";
 
-    // const permanent_address =
-    //   [
-    //     userDetails.permanentAddress.address_1,
-    //     userDetails.permanentAddress.address_2,
-    //     userDetails.permanentAddress.barangay,
-    //     userDetails.permanentAddress.city,
-    //     userDetails.permanentAddress.country,
-    //     userDetails.permanentAddress.state,
-    //     userDetails.permanentAddress.zip_code,
-    //   ].join(" ") || " ";
+    const permanent_address =
+      [
+        userDetails.permanentAddress.address_1,
+        userDetails.permanentAddress.address_2,
+        userDetails.permanentAddress.barangay,
+        userDetails.permanentAddress.city,
+        userDetails.permanentAddress.country,
+        userDetails.permanentAddress.state,
+        userDetails.permanentAddress.zip_code,
+      ].join(" ") || " ";
 
     return (
       <>
@@ -263,13 +267,13 @@ class KycDetails extends React.PureComponent {
                 <Typography variant="body1" className="detail-label">
                   Current Address
                 </Typography>
-                {/* <Typography variant="body2">{present_address}</Typography> */}
+                <Typography variant="body2">{present_address}</Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="body1" className="detail-label">
                   Permanent Address
                 </Typography>
-                {/* <Typography variant="body2">{permanent_address}</Typography> */}
+                <Typography variant="body2">{permanent_address}</Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="body1" className="detail-label">
@@ -277,13 +281,13 @@ class KycDetails extends React.PureComponent {
                 </Typography>
                 <Typography variant="body2">
                   Type of Document:{" "}
-                  {/* {userDetails.permanentAddress.billing_statement} */}
+                  {userDetails.permanentAddress.billing_statement}
                 </Typography>
-                {/* <img
+                <img
                   className="image-photo"
                   src={userDetails.permanentAddress.billing_statement_photo_url}
                   alt="Billing statement"
-                /> */}
+                />
               </Grid>
             </Grid>
           </Paper>
