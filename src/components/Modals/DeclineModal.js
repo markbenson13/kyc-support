@@ -87,7 +87,7 @@ class DeclineModal extends React.Component {
       status: "Denied",
       review_date: date.getTime(),
       reviewer: adminEmail,
-      remarks: "Denied",
+      remarks: this.state.feedback,
       last_edit_date: date.getTime(),
       level: userLevel,
     };

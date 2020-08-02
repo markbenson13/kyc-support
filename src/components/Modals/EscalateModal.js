@@ -82,7 +82,7 @@ class EscalateModal extends React.Component {
       status: "Escalated",
       review_date: date.getTime(),
       reviewer: adminEmail,
-      remarks: "Escalated",
+      remarks: this.state.feedback,
       last_edit_date: date.getTime(),
       level: userLevel,
     };

@@ -28,7 +28,7 @@ const historyColumn = [
   { id: "lastEditBy", title: "Last edit by" },
 ];
 
-class KycDetails extends React.Component {
+class KycDetails extends React.PureComponent {
   constructor(props) {
     super(props);
 
